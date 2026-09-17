@@ -6388,6 +6388,10 @@ async function initializeApp(){
                 calendars.map(calendar => buildCalendar(calendar))
             );
 
+            /* Keep the original feature set intact: preload the scrapbook
+               after the app is already visible. This never blocks login. */
+            await renderScrapbook();
+
             appInitialized = true;
             showApp();
 
