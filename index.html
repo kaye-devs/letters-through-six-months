@@ -1075,229 +1075,350 @@ footer span{
     opacity:.75;
 }
 
+/* ==================================================
+   SCRAPBOOK PAGE
+================================================== */
+
+.scrapbook-page{
+    display:none;
+
+    min-height:100vh;
+
+    padding:90px 5%;
+
+    background:
+        radial-gradient(
+            circle at 10% 10%,
+            var(--yellow) 0 100px,
+            transparent 101px
+        ),
+        radial-gradient(
+            circle at 90% 85%,
+            var(--white) 0 130px,
+            transparent 131px
+        ),
+        var(--blue-light);
+}
+
+.scrapbook-page.active{
+    display:block;
+
+    animation:pageIn .4s ease;
+}
+
+.scrapbook-page-inner{
+    max-width:1150px;
+
+    margin:auto;
+}
+
+.scrapbook-header{
+    text-align:center;
+
+    margin-bottom:60px;
+}
+
+.back-journal{
+    border:none;
+
+    background:var(--white);
+
+    color:var(--dark);
+
+    padding:11px 20px;
+
+    border-radius:50px;
+
+    cursor:pointer;
+
+    font-weight:600;
+
+    box-shadow:0 6px 18px var(--shadow);
+
+    margin-bottom:25px;
+
+    transition:.3s;
+}
+
+.back-journal:hover{
+    background:var(--yellow);
+
+    transform:translateY(-2px);
+}
+
+.scrapbook-header span{
+    display:block;
+
+    color:var(--blue);
+
+    font-size:13px;
+
+    font-weight:700;
+
+    letter-spacing:3px;
+
+    text-transform:uppercase;
+
+    margin-bottom:10px;
+}
+
+.scrapbook-header h2{
+    font-family:"Cormorant Garamond",serif;
+
+    font-size:clamp(50px,7vw,80px);
+
+    line-height:1;
+}
+
+.scrapbook-header p{
+    max-width:650px;
+
+    margin:18px auto 0;
+}
+
 /* =========================
-   SCRAPBOOK — ENVELOPES
+   ENVELOPES
 ========================= */
 
-.scrapbook-section{
-    background:var(--yellow);
-    position:relative;
-    overflow:hidden;
-    min-height:80vh;
-}
+.envelope-grid{
+    max-width:1050px;
 
-.scrapbook-section:before,
-.scrapbook-section:after{
-    content:"";
-    position:absolute;
-    width:130px;
-    height:35px;
-    background:var(--blue-light);
-    opacity:.8;
-}
-
-.scrapbook-section:before{top:35px;left:-20px;transform:rotate(-8deg);}
-.scrapbook-section:after{right:-20px;bottom:40px;transform:rotate(7deg);}
-
-.scrapbook-intro{
-    max-width:700px;
-    margin:-25px auto 30px;
-    text-align:center;
-}
-
-.scrapbook-progress{
-    display:inline-block;
-    margin-top:15px;
-    padding:8px 14px;
-    border:1px dashed var(--dark);
-    background:rgba(255,255,255,.65);
-    font-size:12px;
-    font-weight:700;
-}
-
-.scrapbook-filters{
-    display:flex;
-    justify-content:center;
-    gap:10px;
-    flex-wrap:wrap;
-    margin-bottom:40px;
-}
-
-.scrap-filter{
-    border:2px solid var(--dark);
-    background:var(--white);
-    color:var(--dark);
-    padding:10px 18px;
-    border-radius:50px;
-    font:inherit;
-    font-size:13px;
-    font-weight:700;
-    cursor:pointer;
-    transition:.25s;
-}
-
-.scrap-filter:hover,.scrap-filter.active{
-    background:var(--dark);
-    color:var(--white);
-}
-
-.scrapbook-grid{
-    max-width:1150px;
     margin:auto;
+
     display:grid;
+
     grid-template-columns:repeat(3,1fr);
-    gap:42px 30px;
-    align-items:start;
+
+    gap:55px 30px;
 }
 
-.scrap-envelope{
+.memory-envelope{
     position:relative;
-    min-height:205px;
+
+    height:245px;
+
     cursor:pointer;
-    perspective:900px;
-    transform:rotate(var(--tilt));
-    transition:transform .35s ease,filter .35s ease;
+
+    transition:.35s;
+
+    outline:none;
 }
 
-.scrap-envelope:hover{
-    transform:translateY(-10px) rotate(0deg);
-    filter:drop-shadow(0 18px 18px rgba(47,72,96,.18));
+.memory-envelope:hover{
+    transform:translateY(-10px) rotate(1deg);
 }
 
-.scrap-envelope-body{
+.memory-envelope:focus-visible{
+    outline:3px solid var(--blue);
+
+    outline-offset:8px;
+
+    border-radius:10px;
+}
+
+.envelope-body{
     position:absolute;
-    inset:30px 0 0;
-    background:#f8fbff;
-    border:2px solid rgba(47,72,96,.2);
-    box-shadow:0 12px 25px var(--shadow);
+
+    inset:35px 0 0;
+
+    background:var(--white);
+
+    border-radius:4px;
+
+    box-shadow:0 14px 30px var(--shadow);
+
     overflow:hidden;
 }
 
-.scrap-envelope-body:before{
+.envelope-body:after{
     content:"";
-    position:absolute;
-    inset:auto 0 0;
-    height:75%;
-    background:linear-gradient(135deg,transparent 49.5%,rgba(125,167,217,.18) 50%,transparent 50.5%),
-               linear-gradient(45deg,transparent 49.5%,rgba(125,167,217,.18) 50%,transparent 50.5%);
-}
 
-.scrap-envelope-flap{
     position:absolute;
-    z-index:3;
+
     left:0;
     right:0;
-    top:30px;
-    height:92px;
-    background:#fff;
-    border:2px solid rgba(47,72,96,.2);
-    clip-path:polygon(0 0,100% 0,50% 100%);
-    transform-origin:50% 0;
-    transition:transform .45s cubic-bezier(.2,.8,.2,1);
-    box-shadow:0 2px 4px rgba(47,72,96,.08);
-}
+    bottom:0;
 
-.scrap-envelope:hover .scrap-envelope-flap{
-    transform:rotateX(22deg);
-}
+    height:100px;
 
-.scrap-envelope-letter{
-    position:absolute;
-    z-index:2;
-    left:10%;
-    right:10%;
-    top:52px;
-    min-height:112px;
-    padding:18px 16px;
     background:var(--yellow);
-    border:1px solid rgba(47,72,96,.12);
-    box-shadow:0 7px 15px rgba(47,72,96,.1);
-    transition:transform .45s cubic-bezier(.2,.8,.2,1);
+
+    clip-path:polygon(
+        0 100%,
+        50% 20%,
+        100% 100%
+    );
+
+    opacity:.75;
 }
 
-.scrap-envelope:hover .scrap-envelope-letter{
-    transform:translateY(-42px);
-}
-
-.scrap-envelope-seal{
+.envelope-flap{
     position:absolute;
+
+    top:35px;
+
+    left:0;
+
+    width:100%;
+
+    height:115px;
+
+    background:var(--yellow);
+
+    clip-path:polygon(
+        0 0,
+        100% 0,
+        50% 78%
+    );
+
+    z-index:3;
+
+    transform-origin:top center;
+
+    transition:
+        transform .6s cubic-bezier(.2,.8,.2,1);
+}
+
+.envelope-paper{
+    position:absolute;
+
+    width:78%;
+
+    height:95px;
+
+    background:var(--blue-light);
+
+    left:11%;
+
+    top:65px;
+
+    z-index:1;
+
+    transition:.5s;
+}
+
+.envelope-date{
+    position:absolute;
+
+    left:0;
+    right:0;
+
+    top:130px;
+
     z-index:5;
-    left:50%;
-    top:82px;
-    width:42px;
-    height:42px;
-    transform:translateX(-50%);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    border-radius:50%;
-    background:var(--dark);
-    color:white;
-    font-family:"Cormorant Garamond",serif;
-    font-size:22px;
-    box-shadow:0 5px 12px rgba(47,72,96,.2);
-}
 
-.scrap-envelope-date{
-    font-size:10px;
-    text-transform:uppercase;
-    letter-spacing:1.2px;
-    font-weight:800;
-    color:var(--blue);
-    margin-bottom:5px;
-}
-
-.scrap-envelope-title{
-    font-family:"Cormorant Garamond",serif;
-    font-size:23px;
-    line-height:1.05;
-}
-
-.scrap-envelope-hint{
-    position:absolute;
-    z-index:6;
-    left:50%;
-    bottom:10px;
-    transform:translateX(-50%);
-    width:90%;
     text-align:center;
-    font-size:10px;
+
+    font-family:"Cormorant Garamond",serif;
+
+    font-size:27px;
+
     font-weight:700;
-    letter-spacing:.7px;
-    text-transform:uppercase;
+
+    color:var(--dark);
 }
 
-.scrap-envelope.pop{
-    animation:envelopePop .65s cubic-bezier(.2,.9,.25,1) both;
-    animation-delay:var(--delay);
-}
+.envelope-label{
+    position:absolute;
 
-@keyframes envelopePop{
-    0%{opacity:0;transform:translateY(45px) scale(.75) rotate(0deg);}
-    65%{opacity:1;transform:translateY(-8px) scale(1.03) rotate(var(--tilt));}
-    100%{opacity:1;transform:translateY(0) scale(1) rotate(var(--tilt));}
-}
+    left:10px;
+    right:10px;
 
-.empty-scrapbook{
-    grid-column:1/-1;
+    top:170px;
+
+    z-index:5;
+
     text-align:center;
-    background:rgba(255,255,255,.75);
-    padding:55px 25px;
-    box-shadow:0 10px 25px var(--shadow);
+
+    font-size:10px;
+
+    text-transform:uppercase;
+
+    letter-spacing:1.5px;
+
+    color:var(--blue);
+
+    font-weight:700;
 }
 
-.empty-scrapbook h3{
+.envelope-heart{
+    position:absolute;
+
+    z-index:6;
+
+    top:91px;
+
+    left:50%;
+
+    transform:translateX(-50%);
+
+    font-size:27px;
+}
+
+.envelope-tape{
+    position:absolute;
+
+    width:75px;
+
+    height:22px;
+
+    background:var(--blue-light);
+
+    top:25px;
+
+    left:50%;
+
+    transform:
+        translateX(-50%)
+        rotate(-3deg);
+
+    z-index:10;
+
+    opacity:.9;
+}
+
+.memory-envelope:hover .envelope-flap{
+    transform:rotateX(25deg);
+}
+
+.memory-envelope:hover .envelope-paper{
+    transform:translateY(-18px);
+}
+
+/* =========================
+   EMPTY SCRAPBOOK
+========================= */
+
+.empty-envelope{
+    grid-column:1/-1;
+
+    text-align:center;
+
+    padding:60px 25px;
+
+    background:rgba(255,255,255,.75);
+
+    box-shadow:0 12px 28px var(--shadow);
+}
+
+.empty-envelope h3{
     font-family:"Cormorant Garamond",serif;
-    font-size:34px;
-    margin-bottom:8px;
+
+    font-size:36px;
+
+    margin-bottom:10px;
 }
 
 .scrapbook-note{
     text-align:center;
-    margin-top:30px;
+
+    margin-top:50px;
+
     font-size:12px;
+
     opacity:.7;
 }
+
 
 /* =========================
    MEMORY ENVELOPE MODAL
@@ -1933,7 +2054,7 @@ footer span{
         <ul class="nav-links">
             <li><a href="#beginning" data-nav>Beginning</a></li>
             <li><a href="#months" data-nav>Journal</a></li>
-            <li><a href="#scrapbook" data-nav>Scrapbook</a></li>
+            <li><a href="#scrapbookPage" data-nav>Scrapbook</a></li>
             <li><a href="#miss" data-nav>The Little Things</a></li>
             <li><a href="#countdown" data-nav>Countdown</a></li>
             <li><a href="#message" class="message-nav" data-nav>Message Me ♡</a></li>
@@ -3244,89 +3365,155 @@ footer span{
 </div>
 
 
-<!-- =========================
-     SCRAPBOOK
-========================= -->
+<!-- ==================================================
+     SCRAPBOOK PAGE
+================================================== -->
 
-<!-- =========================
-     MESSAGE PAGE
-========================= -->
-<section id="message" class="message-section">
-    <div class="message-page-inner">
-        <button class="back-message" id="backMessage" type="button">← Back to Our Little Corner</button>
+<section
+    id="scrapbookPage"
+    class="scrapbook-page">
 
-        <div class="section-title">
-            <span>A Little Door Back To Me</span>
-            <h2>Message Me Here ♡</h2>
-        </div>
+    <div class="scrapbook-page-inner">
 
-        <div class="message-note-card">
-            <div class="message-note-icon">✉</div>
-            <h3>If you access this web, Love, please message me here.</h3>
-            <p>You can leave me a little message, a photo, a voice recording, or a video. I'll keep it here for us. ♡</p>
-        </div>
+        <div class="scrapbook-header">
 
-        <form class="message-form" id="messageForm">
-            <label for="messageText">Your message</label>
-            <textarea id="messageText" placeholder="Tell me about your day, Love…" required></textarea>
+            <button
+                class="back-journal"
+                id="backToJournal">
 
-            <div class="message-media-grid">
-                <label class="upload-card">
-                    <span>📷</span>
-                    <strong>Add image</strong>
-                    <small>Photos from your day</small>
-                    <input type="file" id="messageImages" accept="image/*" multiple>
-                </label>
-                <label class="upload-card">
-                    <span>🎙</span>
-                    <strong>Add audio</strong>
-                    <small>A little voice message</small>
-                    <input type="file" id="messageAudio" accept="audio/*" multiple>
-                </label>
-                <label class="upload-card">
-                    <span>🎥</span>
-                    <strong>Add video</strong>
-                    <small>A little moment for me</small>
-                    <input type="file" id="messageVideos" accept="video/*" multiple>
-                </label>
-            </div>
+                ← Back to Our Journal
 
-            <div id="messagePreview" class="message-preview"></div>
-
-            <button class="send-message-button" id="sendMessageButton" type="submit">
-                Send This To Me ♡
             </button>
-        </form>
 
-        <div class="message-history" id="messageHistory">
-            <div class="message-history-title">Our little messages</div>
-            <div id="messagesList"></div>
+            <span>
+                Our Memories
+            </span>
+
+            <h2>
+                Our Little Scrapbook ♡
+            </h2>
+
+            <p>
+                Every day we spend apart gets its own
+                little envelope. Open one whenever you
+                want to remember what happened that day.
+            </p>
+
         </div>
+
+        <div
+            class="envelope-grid"
+            id="envelopeGrid">
+        </div>
+
+        <div class="scrapbook-note">
+
+            Every envelope contains the letters,
+            photos, and videos saved for that day. ♡
+
+        </div>
+
     </div>
+
 </section>
 
-<section id="scrapbook" class="scrapbook-section">
-    <div class="section-title">
-        <span>Our Memories</span>
-        <h2>Our Little Scrapbook ♡</h2>
+<!-- ==================================================
+     DAILY MEMORY VIEWER
+================================================== -->
+
+<div
+    class="memory-overlay"
+    id="memoryOverlay">
+
+    <div class="memory-letter">
+
+        <button
+            class="memory-close"
+            id="memoryClose"
+            aria-label="Close memory">
+
+            ×
+
+        </button>
+
+        <div
+            class="memory-date"
+            id="memoryDate">
+        </div>
+
+        <h3 id="memoryTitle">
+            A Little Memory From This Day ♡
+        </h3>
+
+        <div
+            class="memory-text"
+            id="memoryText">
+        </div>
+
+        <div
+            class="memory-section-label"
+            id="photoLabel"
+            style="display:none;">
+
+            Photos ♡
+
+        </div>
+
+        <div
+            class="memory-media"
+            id="memoryPhotos">
+        </div>
+
+        <div
+            class="memory-section-label"
+            id="videoLabel"
+            style="display:none;">
+
+            Little Videos ♡
+
+        </div>
+
+        <div
+            class="memory-media"
+            id="memoryVideos">
+        </div>
+
     </div>
 
-    <div class="scrapbook-intro">
-        <p>Every day you complete becomes an envelope in our scrapbook. Click an envelope to open that day's memory.</p>
-        <div class="scrapbook-progress" id="scrapbookProgress">Loading our little envelopes… ♡</div>
+</div>
+
+<!-- ==================================================
+     FULLSCREEN PHOTO VIEWER
+================================================== -->
+
+<div
+    class="photo-lightbox"
+    id="photoLightbox"
+    aria-hidden="true">
+
+    <button
+        class="photo-lightbox-close"
+        id="photoLightboxClose"
+        aria-label="Close photo">
+
+        ×
+
+    </button>
+
+    <img
+        id="lightboxImage"
+        src=""
+        alt="Expanded memory photo">
+
+    <div
+        class="photo-lightbox-caption"
+        id="photoLightboxCaption">
+
+        Click anywhere outside to close ♡
+
     </div>
 
-    <div class="scrapbook-filters">
-        <button class="scrap-filter active" data-filter="all">All Days</button>
-        <button class="scrap-filter" data-filter="letter">Letters</button>
-        <button class="scrap-filter" data-filter="photo">Photos</button>
-        <button class="scrap-filter" data-filter="video">Videos</button>
-    </div>
-
-    <div class="scrapbook-grid" id="scrapbookGrid"></div>
-
-    <div class="scrapbook-note">One envelope for every day we have written something here. ♡</div>
-</section>
+</div>
 
 
 <!-- =========================
@@ -4487,6 +4674,21 @@ const monthsSection =
         "months"
     );
 
+const scrapbookPage =
+    document.getElementById(
+        "scrapbookPage"
+    );
+
+const scrapbookNav =
+    document.querySelector(
+        'a[href="#scrapbookPage"]'
+    );
+
+const backToJournal =
+    document.getElementById(
+        "backToJournal"
+    );
+
 
 function openMonth(monthKey){
 
@@ -4506,9 +4708,7 @@ function openMonth(monthKey){
         "none";
 
 
-    document.querySelector(
-        ".scrapbook-section"
-    ).style.display =
+    document.getElementById("scrapbookPage").style.display =
         "none";
 
 
@@ -4552,9 +4752,7 @@ function closeMonth(){
         "";
 
 
-    document.querySelector(
-        ".scrapbook-section"
-    ).style.display =
+    document.getElementById("scrapbookPage").style.display =
         "";
 
 
@@ -5313,187 +5511,484 @@ document.querySelectorAll(
 );
 
 
-/* ============================================================
-   SCRAPBOOK — ENVELOPE DAYS
-============================================================ */
+/* ==================================================
+   SCRAPBOOK PAGE NAVIGATION
+================================================== */
 
-let currentFilter = "all";
+function openScrapbook(){
 
-function formatDate(month,day){
-    const [year,monthNumber] = month.split("-").map(Number);
-    return `${monthNames[monthNumber-1]} ${day}, ${year}`;
-}
-
-function entryHasContent(entry){
-    return !!(
-        entry &&
-        (
-            entry.letter ||
-            entry.images?.length ||
-            entry.videos?.length
-        )
+    monthPages.forEach(
+        page =>
+            page.classList.remove(
+                "active"
+            )
     );
-}
 
-function getEntryTypes(entry){
-    const types = [];
-    if(entry.letter) types.push("letter");
-    if(entry.images?.length) types.push("photo");
-    if(entry.videos?.length) types.push("video");
-    return types;
-}
 
-function openMemoryEnvelope(entry){
-    const overlay = document.getElementById("memoryOverlay");
-    const date = document.getElementById("memoryDate");
-    const title = document.getElementById("memoryTitle");
-    const letter = document.getElementById("memoryLetter");
-    const media = document.getElementById("memoryMedia");
+    monthsSection.style.display =
+        "none";
 
-    date.textContent = formatDate(entry.month,entry.day);
-    title.textContent = entry.letter ? "A Letter For You ♡" : "A Little Memory ♡";
-    letter.textContent = entry.letter || "";
-    media.innerHTML = "";
 
-    (entry.imageUrls || []).forEach(url=>{
-        const img=document.createElement("img");
-        img.src=url;
-        img.alt="Memory photo";
-        img.addEventListener("click",()=>openPhotoLightbox(url));
-        media.appendChild(img);
+    missSection.style.display =
+        "none";
+
+
+    countdownSection.style.display =
+        "none";
+
+
+    finalSection.style.display =
+        "none";
+
+
+    scrapbookPage.style.display =
+        "block";
+
+
+    scrapbookPage.classList.add(
+        "active"
+    );
+
+
+    closeMobileMenu();
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
     });
 
-    (entry.videoUrls || []).forEach(url=>{
-        const video=document.createElement("video");
-        video.src=url;
-        video.controls=true;
-        video.preload="metadata";
-        media.appendChild(video);
+
+    renderScrapbook();
+
+}
+
+
+function closeScrapbook(){
+
+    scrapbookPage.style.display =
+        "none";
+
+
+    scrapbookPage.classList.remove(
+        "active"
+    );
+
+
+    monthsSection.style.display =
+        "";
+
+
+    missSection.style.display =
+        "";
+
+
+    countdownSection.style.display =
+        "";
+
+
+    finalSection.style.display =
+        "";
+
+
+    monthsSection.scrollIntoView({
+        behavior:"smooth"
     });
 
-    overlay.classList.add("show");
-    document.body.classList.add("modal-open");
 }
 
-function closeMemoryEnvelope(){
-    document.getElementById("memoryOverlay").classList.remove("show");
-    document.body.classList.remove("modal-open");
+
+scrapbookNav.addEventListener(
+    "click",
+    event => {
+
+        event.preventDefault();
+
+        openScrapbook();
+
+    }
+);
+
+
+backToJournal.addEventListener(
+    "click",
+    closeScrapbook
+);
+
+
+/* ==================================================
+   SCRAPBOOK
+   ONE ENVELOPE = ONE DAY
+================================================== */
+
+function formatDate(
+    month,
+    day
+){
+
+    const [
+        year,
+        monthNumber
+    ] =
+        month
+        .split("-")
+        .map(Number);
+
+
+    return `
+        ${monthNames[monthNumber - 1]}
+        ${day},
+        ${year}
+    `;
+
 }
 
-document.getElementById("closeMemory").addEventListener("click",closeMemoryEnvelope);
-document.getElementById("memoryOverlay").addEventListener("click",event=>{
-    if(event.target.id === "memoryOverlay") closeMemoryEnvelope();
-});
-
-function addEnvelope(grid,entry,index){
-    const envelope=document.createElement("article");
-    envelope.className="scrap-envelope pop";
-    envelope.style.setProperty("--delay",`${Math.min(index,18)*45}ms`);
-    envelope.style.setProperty("--tilt",index%3===0?"-1deg":index%3===1?"1deg":".5deg");
-
-    const body=document.createElement("div");
-    body.className="scrap-envelope-body";
-
-    const letter=document.createElement("div");
-    letter.className="scrap-envelope-letter";
-
-    const date=document.createElement("div");
-    date.className="scrap-envelope-date";
-    date.textContent=formatDate(entry.month,entry.day);
-
-    const title=document.createElement("div");
-    title.className="scrap-envelope-title";
-    title.textContent=entry.letter ? "A letter for you ♡" : "A little memory ♡";
-
-    letter.append(date,title);
-    body.appendChild(letter);
-
-    const flap=document.createElement("div");
-    flap.className="scrap-envelope-flap";
-
-    const seal=document.createElement("div");
-    seal.className="scrap-envelope-seal";
-    seal.textContent="♡";
-
-    const hint=document.createElement("div");
-    hint.className="scrap-envelope-hint";
-    const mediaCount=(entry.images?.length||0)+(entry.videos?.length||0);
-    hint.textContent=`Open Day ${entry.day}${mediaCount ? ` · ${mediaCount} media` : ""}`;
-
-    envelope.append(body,flap,seal,hint);
-    envelope.addEventListener("click",()=>openMemoryEnvelope(entry));
-    grid.appendChild(envelope);
-}
 
 async function renderScrapbook(){
-    const grid=document.getElementById("scrapbookGrid");
-    const progress=document.getElementById("scrapbookProgress");
-    grid.innerHTML="";
 
-    let entries;
-    try{
-        entries=(await getAllEntries())
-            .filter(entry=>/^\d{4}-\d{2}$/.test(entry.month) && entryHasContent(entry))
-            .sort((a,b)=>{
-                const monthCompare=a.month.localeCompare(b.month);
-                return monthCompare!==0 ? monthCompare : Number(a.day)-Number(b.day);
-            });
-    }catch(error){
-        console.error(error);
-        progress.textContent="We couldn't open our envelopes right now. ♡";
-        grid.innerHTML=`<div class="empty-scrapbook"><h3>Our scrapbook is resting ♡</h3><p>Please try again in a moment.</p></div>`;
-        return;
+    const grid =
+        document.getElementById(
+            "envelopeGrid"
+        );
+
+
+    grid.innerHTML = "";
+
+
+    const entries =
+        await getAllEntries();
+
+
+    entries.sort(
+        (a,b) => {
+
+            const monthCompare =
+                a.month.localeCompare(
+                    b.month
+                );
+
+
+            if(
+                monthCompare !== 0
+            ){
+
+                return monthCompare;
+
+            }
+
+
+            return (
+                Number(a.day) -
+                Number(b.day)
+            );
+
+        }
+    );
+
+
+    let memoryCount = 0;
+
+
+    entries.forEach(
+        entry => {
+
+            const hasLetter =
+                !!entry.letter;
+
+
+            const photos =
+                entry.imageUrls || entry.images || [];
+
+
+            const videos =
+                entry.videoUrls || entry.videos || [];
+
+
+            if(
+                !hasLetter &&
+                photos.length === 0 &&
+                videos.length === 0
+            ){
+
+                return;
+
+            }
+
+
+            memoryCount++;
+
+
+            createMemoryEnvelope(
+                grid,
+                entry
+            );
+
+        }
+    );
+
+
+    if(memoryCount === 0){
+
+        const empty =
+            document.createElement(
+                "div"
+            );
+
+
+        empty.className =
+            "empty-envelope";
+
+
+        empty.innerHTML = `
+
+            <h3>
+                No memories yet ♡
+            </h3>
+
+            <p>
+                Open a date in the journal
+                and leave something behind for me.
+            </p>
+
+        `;
+
+
+        grid.appendChild(
+            empty
+        );
+
     }
 
-    const visible=entries.filter(entry=>{
-        if(currentFilter==="all") return true;
-        return getEntryTypes(entry).includes(currentFilter);
-    });
-
-    progress.textContent = entries.length
-        ? `${entries.length} day${entries.length===1?"":"s"} completed · ${visible.length} envelope${visible.length===1?"":"s"} showing ♡`
-        : "0 days completed · your first envelope is waiting ♡";
-
-    if(!visible.length){
-        grid.innerHTML=`<div class="empty-scrapbook">
-            <h3>No envelopes here yet ♡</h3>
-            <p>Open a date in the journal and leave a letter, photo, or video.</p>
-        </div>`;
-        return;
-    }
-
-    visible.forEach((entry,index)=>addEnvelope(grid,entry,index));
 }
 
-document.querySelectorAll(".scrap-filter").forEach(button=>{
-    button.addEventListener("click",async()=>{
-        document.querySelectorAll(".scrap-filter").forEach(filter=>filter.classList.remove("active"));
-        button.classList.add("active");
-        currentFilter=button.dataset.filter;
-        await renderScrapbook();
-    });
-});
 
-/* ============================================================
-   MENU PAGE NAVIGATION
-============================================================ */
+/* ==================================================
+   CREATE ENVELOPE
+================================================== */
 
-document.querySelectorAll('a[href="#scrapbook"]').forEach(link=>{
-    link.addEventListener("click",event=>{
-        event.preventDefault();
-        document.querySelectorAll(".month-page").forEach(page=>page.classList.remove("active"));
-        document.getElementById("months").style.display="";
-        document.querySelector(".scrapbook-section").style.display="";
-        document.querySelector(".miss-section").style.display="";
-        document.querySelector(".countdown-section").style.display="";
-        document.querySelector(".final-section").style.display="";
-        document.querySelector(".hero").style.display="";
-        document.querySelector(".letter-section").style.display="";
-        closeMobileMenu();
-        document.getElementById("scrapbook").scrollIntoView({behavior:"smooth"});
-        renderScrapbook();
-    });
-});
+function createMemoryEnvelope(
+    grid,
+    entry
+){
+
+    const envelope =
+        document.createElement(
+            "article"
+        );
+
+
+    envelope.className =
+        "memory-envelope";
+
+
+    envelope.tabIndex =
+        0;
+
+
+    envelope.setAttribute(
+        "role",
+        "button"
+    );
+
+
+    const body =
+        document.createElement(
+            "div"
+        );
+
+
+    body.className =
+        "envelope-body";
+
+
+    const paper =
+        document.createElement(
+            "div"
+        );
+
+
+    paper.className =
+        "envelope-paper";
+
+
+    const flap =
+        document.createElement(
+            "div"
+        );
+
+
+    flap.className =
+        "envelope-flap";
+
+
+    const tape =
+        document.createElement(
+            "div"
+        );
+
+
+    tape.className =
+        "envelope-tape";
+
+
+    const heart =
+        document.createElement(
+            "div"
+        );
+
+
+    heart.className =
+        "envelope-heart";
+
+
+    heart.textContent =
+        "♡";
+
+
+    const date =
+        document.createElement(
+            "div"
+        );
+
+
+    date.className =
+        "envelope-date";
+
+
+    date.textContent =
+        formatDate(
+            entry.month,
+            entry.day
+        );
+
+
+    const label =
+        document.createElement(
+            "div"
+        );
+
+
+    label.className =
+        "envelope-label";
+
+
+    const photoCount =
+        (entry.imageUrls || entry.images || []).length;
+
+
+    const videoCount =
+        (entry.videoUrls || entry.videos || []).length;
+
+
+    const parts = [];
+
+
+    if(entry.letter){
+
+        parts.push(
+            "Letter"
+        );
+
+    }
+
+
+    if(photoCount){
+
+        parts.push(
+            `${photoCount} Photo${
+                photoCount > 1
+                ? "s"
+                : ""
+            }`
+        );
+
+    }
+
+
+    if(videoCount){
+
+        parts.push(
+            `${videoCount} Video${
+                videoCount > 1
+                ? "s"
+                : ""
+            }`
+        );
+
+    }
+
+
+    label.textContent =
+        parts.join(" · ");
+
+
+    body.appendChild(
+        paper
+    );
+
+
+    body.appendChild(
+        heart
+    );
+
+
+    body.appendChild(
+        date
+    );
+
+
+    body.appendChild(
+        label
+    );
+
+
+    envelope.appendChild(
+        body
+    );
+
+
+    envelope.appendChild(
+        flap
+    );
+
+
+    envelope.appendChild(
+        tape
+    );
+
+
+    envelope.addEventListener(
+        "click",
+        () =>
+            openMemoryEnvelope(entry)
+    );
+
+
+    envelope.addEventListener(
+        "keydown",
+        event => {
+
+            if(
+                event.key === "Enter" ||
+                event.key === " "
+            ){
+
+                event.preventDefault();
+
+                openMemoryEnvelope(entry);
+
+            }
+
+        }
+    );
+
+
+    grid.appendChild(
+        envelope
+    );
+
+}
+
+
 
 /* ============================================================
    MESSAGE PAGE
@@ -5502,7 +5997,7 @@ document.querySelectorAll('a[href="#scrapbook"]').forEach(link=>{
 function openMessagePage(){
     document.querySelectorAll(".month-page").forEach(page=>page.classList.remove("active"));
     document.getElementById("months").style.display="none";
-    document.querySelector(".scrapbook-section").style.display="none";
+    document.getElementById("scrapbookPage").style.display="none";
     document.querySelector(".miss-section").style.display="none";
     document.querySelector(".countdown-section").style.display="none";
     document.querySelector(".final-section").style.display="none";
@@ -5519,7 +6014,7 @@ function closeMessagePage(){
     document.querySelector(".hero").style.display="";
     document.querySelector(".letter-section").style.display="";
     document.getElementById("months").style.display="";
-    document.querySelector(".scrapbook-section").style.display="";
+    document.getElementById("scrapbookPage").style.display="";
     document.querySelector(".miss-section").style.display="";
     document.querySelector(".countdown-section").style.display="";
     document.querySelector(".final-section").style.display="";
