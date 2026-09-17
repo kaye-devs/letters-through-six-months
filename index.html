@@ -1,0 +1,5582 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Letters Through Six Months ♡</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- SUPABASE -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+
+:root{
+    --yellow:#fff7cc;
+    --blue-light:#dceeff;
+    --blue:#7da7d9;
+    --white:#fff;
+    --dark:#2f4860;
+    --shadow:rgba(47,72,96,.15);
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    font-family:"DM Sans",sans-serif;
+    background:var(--blue-light);
+    color:var(--dark);
+    line-height:1.7;
+}
+
+body.modal-open{
+    overflow:hidden;
+}
+
+/* =========================
+   LOGIN SCREEN
+========================= */
+
+#authScreen{
+    position:fixed;
+    inset:0;
+    z-index:99999;
+    background:
+        radial-gradient(circle at 10% 20%,var(--yellow) 0 100px,transparent 101px),
+        radial-gradient(circle at 90% 80%,var(--white) 0 130px,transparent 131px),
+        var(--blue-light);
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:25px;
+
+    transition:opacity .4s ease,visibility .4s ease;
+}
+
+#authScreen.hidden{
+    opacity:0;
+    visibility:hidden;
+    pointer-events:none;
+}
+
+.auth-card{
+    width:min(450px,100%);
+    background:var(--white);
+    padding:45px 38px;
+    box-shadow:0 25px 70px rgba(47,72,96,.2);
+    text-align:center;
+    position:relative;
+}
+
+.auth-card:before,
+.auth-card:after{
+    content:"";
+    position:absolute;
+    width:100px;
+    height:25px;
+    background:var(--yellow);
+    opacity:.9;
+}
+
+.auth-card:before{
+    top:-10px;
+    left:30px;
+    transform:rotate(-5deg);
+}
+
+.auth-card:after{
+    bottom:-10px;
+    right:30px;
+    transform:rotate(5deg);
+}
+
+.auth-heart{
+    font-family:"Cormorant Garamond",serif;
+    font-size:48px;
+    margin-bottom:5px;
+}
+
+.auth-card .small-title{
+    margin-bottom:12px;
+}
+
+.auth-card h1{
+    font-family:"Cormorant Garamond",serif;
+    font-size:45px;
+    line-height:1;
+    margin-bottom:12px;
+}
+
+.auth-card h1 span{
+    background:var(--yellow);
+    padding:0 8px;
+}
+
+.auth-card > p{
+    font-size:14px;
+    margin-bottom:28px;
+    opacity:.8;
+}
+
+.auth-form{
+    display:grid;
+    gap:14px;
+    text-align:left;
+}
+
+.auth-form label{
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:1.5px;
+    font-weight:700;
+}
+
+.auth-form input{
+    width:100%;
+    padding:14px 16px;
+    border:1px solid rgba(47,72,96,.2);
+    border-radius:8px;
+    background:#fff;
+    color:var(--dark);
+    font:inherit;
+    outline:none;
+    transition:.2s;
+}
+
+.auth-form input:focus{
+    border-color:var(--blue);
+    box-shadow:0 0 0 3px rgba(125,167,217,.15);
+}
+
+.auth-button{
+    margin-top:8px;
+    border:none;
+    background:var(--dark);
+    color:var(--white);
+    padding:14px 20px;
+    border-radius:50px;
+    font:inherit;
+    font-weight:700;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.auth-button:hover{
+    background:var(--blue);
+    transform:translateY(-2px);
+}
+
+.auth-button:disabled{
+    opacity:.6;
+    cursor:not-allowed;
+    transform:none;
+}
+
+.auth-error{
+    display:none;
+    background:#fff0f0;
+    color:#a94b4b;
+    padding:11px 14px;
+    border-radius:8px;
+    font-size:12px;
+    text-align:left;
+}
+
+.auth-error.show{
+    display:block;
+}
+
+.auth-note{
+    margin-top:20px;
+    font-size:11px;
+    opacity:.55;
+}
+
+/* =========================
+   LOADING SCREEN
+========================= */
+
+#loadingScreen{
+    position:fixed;
+    inset:0;
+    z-index:99998;
+    background:var(--blue-light);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    transition:.4s;
+}
+
+#loadingScreen.hidden{
+    opacity:0;
+    visibility:hidden;
+    pointer-events:none;
+}
+
+.loading-inner{
+    font-family:"Cormorant Garamond",serif;
+    font-size:35px;
+}
+
+.loading-inner span{
+    display:block;
+    font-family:"DM Sans",sans-serif;
+    font-size:11px;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    margin-top:8px;
+    opacity:.6;
+}
+
+/* =========================
+   NAVIGATION
+========================= */
+
+nav{
+    position:sticky;
+    top:0;
+    z-index:1000;
+
+    background:rgba(255,255,255,.95);
+    backdrop-filter:blur(10px);
+
+    border-bottom:2px solid var(--blue);
+
+    padding:15px 6%;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    gap:20px;
+}
+
+.logo{
+    font-family:"Cormorant Garamond",serif;
+    font-size:27px;
+    font-weight:700;
+    color:var(--dark);
+}
+
+.nav-right{
+    display:flex;
+    align-items:center;
+    gap:22px;
+}
+
+.nav-links{
+    display:flex;
+    gap:25px;
+    list-style:none;
+}
+
+.nav-links a{
+    text-decoration:none;
+    color:var(--dark);
+    font-size:13px;
+    font-weight:600;
+    transition:.3s;
+}
+
+.nav-links a:hover{
+    color:var(--blue);
+}
+
+.logout-button{
+    border:none;
+    background:var(--dark);
+    color:white;
+    border-radius:50px;
+    padding:8px 14px;
+    font:inherit;
+    font-size:11px;
+    font-weight:700;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.logout-button:hover{
+    background:var(--blue);
+}
+
+/* =========================
+   HERO
+========================= */
+
+.hero{
+    min-height:90vh;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    text-align:center;
+
+    padding:80px 20px;
+
+    background:
+        radial-gradient(circle at 10% 20%,var(--yellow) 0 100px,transparent 101px),
+        radial-gradient(circle at 90% 80%,var(--white) 0 130px,transparent 131px),
+        var(--blue-light);
+
+    position:relative;
+    overflow:hidden;
+}
+
+.hero-content{
+    max-width:850px;
+}
+
+.small-title{
+    font-size:13px;
+    font-weight:700;
+    letter-spacing:3px;
+    text-transform:uppercase;
+    color:var(--blue);
+    margin-bottom:20px;
+}
+
+.hero h1{
+    font-family:"Cormorant Garamond",serif;
+    font-size:clamp(55px,9vw,110px);
+    line-height:.9;
+    margin-bottom:25px;
+}
+
+.hero h1 span{
+    display:inline-block;
+    background:var(--yellow);
+    padding:5px 20px;
+    transform:rotate(-2deg);
+}
+
+.hero p{
+    max-width:600px;
+    margin:0 auto 35px;
+    font-size:17px;
+}
+
+.main-button{
+    display:inline-block;
+    background:var(--dark);
+    color:var(--white);
+    text-decoration:none;
+    padding:15px 30px;
+    border-radius:50px;
+    font-weight:600;
+    box-shadow:0 8px 20px var(--shadow);
+    transition:.3s;
+    cursor:pointer;
+    border:none;
+}
+
+.main-button:hover{
+    background:var(--blue);
+    transform:translateY(-3px);
+}
+
+section{
+    padding:100px 7%;
+}
+
+/* =========================
+   SECTION TITLES
+========================= */
+
+.section-title{
+    text-align:center;
+    margin-bottom:55px;
+}
+
+.section-title span{
+    color:var(--blue);
+    font-size:13px;
+    font-weight:700;
+    letter-spacing:3px;
+    text-transform:uppercase;
+}
+
+.section-title h2{
+    font-family:"Cormorant Garamond",serif;
+    font-size:clamp(42px,6vw,65px);
+    line-height:1;
+    margin-top:10px;
+}
+
+/* =========================
+   FIRST LETTER
+========================= */
+
+.letter-section{
+    background:var(--white);
+}
+
+.letter-overlay{
+    position:fixed;
+    inset:0;
+
+    background:rgba(47,72,96,.55);
+    backdrop-filter:blur(5px);
+
+    z-index:2000;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    padding:25px;
+
+    opacity:0;
+    visibility:hidden;
+    pointer-events:none;
+
+    transition:opacity .45s ease,visibility .45s ease;
+}
+
+.letter-overlay.show{
+    opacity:1;
+    visibility:visible;
+    pointer-events:auto;
+}
+
+.letter-popup{
+    width:min(850px,100%);
+    max-height:85vh;
+    overflow-y:auto;
+
+    background:var(--yellow);
+
+    padding:60px;
+
+    position:relative;
+
+    box-shadow:0 25px 70px rgba(0,0,0,.25);
+
+    transform:translateY(40px) scale(.75) rotate(-2deg);
+    opacity:0;
+
+    transition:
+        transform .6s cubic-bezier(.2,.8,.2,1),
+        opacity .45s ease;
+}
+
+.letter-overlay.show .letter-popup{
+    transform:translateY(0) scale(1) rotate(-.5deg);
+    opacity:1;
+}
+
+.letter-popup:before,
+.letter-popup:after{
+    content:"";
+    position:absolute;
+    width:100px;
+    height:25px;
+    background:var(--blue-light);
+    opacity:.9;
+}
+
+.letter-popup:before{
+    top:-10px;
+    left:30px;
+    transform:rotate(-5deg);
+}
+
+.letter-popup:after{
+    bottom:-10px;
+    right:30px;
+    transform:rotate(5deg);
+}
+
+.close-letter{
+    position:absolute;
+    top:18px;
+    right:22px;
+
+    width:38px;
+    height:38px;
+
+    border:none;
+    border-radius:50%;
+
+    background:var(--dark);
+    color:var(--white);
+
+    font-size:20px;
+
+    cursor:pointer;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    transition:.3s;
+
+    z-index:5;
+}
+
+.close-letter:hover{
+    background:var(--blue);
+    transform:rotate(90deg);
+}
+
+.letter-popup h3{
+    font-family:"Cormorant Garamond",serif;
+    font-size:38px;
+    margin-bottom:25px;
+}
+
+.letter-popup p{
+    margin-bottom:18px;
+}
+
+.signature{
+    font-family:"Cormorant Garamond",serif;
+    font-size:30px;
+    margin-top:30px;
+}
+
+/* =========================
+   MONTHS
+========================= */
+
+.months-section{
+    background:var(--blue-light);
+}
+
+.month-grid{
+    max-width:1100px;
+    margin:auto;
+
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+
+    gap:25px;
+}
+
+.month-card{
+    background:var(--white);
+
+    padding:35px;
+
+    min-height:250px;
+
+    box-shadow:0 10px 25px var(--shadow);
+
+    transition:.3s;
+
+    cursor:pointer;
+
+    position:relative;
+
+    border:none;
+
+    font:inherit;
+    color:var(--dark);
+
+    text-align:left;
+
+    width:100%;
+}
+
+.month-card:nth-child(even){
+    background:var(--yellow);
+}
+
+.month-card:hover{
+    transform:translateY(-8px) rotate(1deg);
+}
+
+.month-card:focus-visible{
+    outline:3px solid var(--blue);
+    outline-offset:4px;
+}
+
+.month-number{
+    font-family:"Cormorant Garamond",serif;
+    font-size:65px;
+    color:var(--blue);
+    line-height:1;
+}
+
+.month-card h3{
+    font-family:"Cormorant Garamond",serif;
+    font-size:30px;
+    margin:15px 0 8px;
+}
+
+.month-card p{
+    font-size:14px;
+}
+
+/* =========================
+   JOURNAL
+========================= */
+
+.journal-section{
+    background:var(--white);
+}
+
+.journal-container{
+    max-width:1000px;
+    margin:auto;
+}
+
+.journal-entry{
+    background:var(--blue-light);
+    margin-bottom:70px;
+    padding:35px;
+    position:relative;
+    box-shadow:0 15px 35px var(--shadow);
+}
+
+.journal-entry:nth-child(even){
+    background:var(--yellow);
+}
+
+.entry-date{
+    display:inline-block;
+    background:var(--dark);
+    color:var(--white);
+    padding:7px 15px;
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:1px;
+    margin-bottom:20px;
+}
+
+.journal-entry h3{
+    font-family:"Cormorant Garamond",serif;
+    font-size:42px;
+    margin-bottom:20px;
+}
+
+/* =========================
+   LITTLE THINGS
+========================= */
+
+.miss-section{
+    background:var(--white);
+}
+
+.miss-grid{
+    max-width:1000px;
+    margin:auto;
+
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+
+    gap:25px;
+}
+
+.miss-card{
+    background:var(--white);
+    padding:30px;
+    text-align:center;
+    box-shadow:0 10px 25px var(--shadow);
+    transition:.3s;
+}
+
+.miss-card:nth-child(even){
+    background:var(--yellow);
+}
+
+.miss-card:hover{
+    transform:translateY(-5px);
+}
+
+.miss-icon{
+    font-size:35px;
+    margin-bottom:15px;
+}
+
+.miss-card h3{
+    font-family:"Cormorant Garamond",serif;
+    font-size:27px;
+    margin-bottom:10px;
+}
+
+/* =========================
+   COUNTDOWN
+========================= */
+
+.countdown-section{
+    background:var(--dark);
+    color:var(--white);
+    text-align:center;
+}
+
+.countdown-section .section-title span{
+    color:var(--yellow);
+}
+
+.countdown-section .section-title h2{
+    color:var(--white);
+}
+
+.countdown{
+    max-width:900px;
+    margin:auto;
+
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+
+    gap:20px;
+}
+
+.time-box{
+    background:var(--white);
+    color:var(--dark);
+    padding:25px;
+    box-shadow:0 10px 25px rgba(0,0,0,.15);
+}
+
+.time-box span{
+    display:block;
+    font-family:"Cormorant Garamond",serif;
+    font-size:55px;
+    font-weight:700;
+}
+
+.time-box small{
+    text-transform:uppercase;
+    letter-spacing:2px;
+    font-size:10px;
+}
+
+.countdown-note{
+    margin-top:22px;
+    font-size:14px;
+    opacity:.9;
+}
+
+/* =========================
+   FINAL
+========================= */
+
+.final-section{
+    background:var(--white);
+    text-align:center;
+}
+
+.final-letter{
+    max-width:750px;
+    margin:auto;
+}
+
+.final-letter h2{
+    font-family:"Cormorant Garamond",serif;
+    font-size:clamp(50px,7vw,80px);
+    line-height:1;
+    margin-bottom:25px;
+}
+
+.final-letter p{
+    font-size:18px;
+    margin-bottom:20px;
+}
+
+footer{
+    background:var(--dark);
+    color:var(--white);
+    text-align:center;
+    padding:30px;
+    font-size:13px;
+}
+
+footer span{
+    color:var(--yellow);
+}
+
+/* =========================
+   MONTH PAGES + CALENDAR
+========================= */
+
+.month-page{
+    display:none;
+
+    min-height:100vh;
+
+    padding:80px 5%;
+
+    background:
+        radial-gradient(circle at 10% 10%,var(--yellow) 0 100px,transparent 101px),
+        radial-gradient(circle at 90% 90%,var(--white) 0 130px,transparent 131px),
+        var(--blue-light);
+}
+
+.month-page.active{
+    display:block;
+    animation:pageIn .35s ease;
+}
+
+@keyframes pageIn{
+    from{
+        opacity:0;
+        transform:translateY(12px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+.month-page-inner{
+    max-width:1100px;
+    margin:auto;
+}
+
+.month-page-header{
+    text-align:center;
+    margin-bottom:35px;
+}
+
+.back-months{
+    border:none;
+    background:var(--white);
+    color:var(--dark);
+    padding:10px 18px;
+    border-radius:50px;
+    cursor:pointer;
+    font-weight:600;
+    box-shadow:0 6px 18px var(--shadow);
+    margin-bottom:20px;
+}
+
+.back-months:hover{
+    background:var(--yellow);
+}
+
+.month-page-header h2{
+    font-family:"Cormorant Garamond",serif;
+    font-size:clamp(45px,7vw,75px);
+    line-height:1;
+}
+
+.month-page-header p{
+    margin-top:10px;
+}
+
+.calendar-wrap{
+    background:rgba(255,255,255,.94);
+    padding:clamp(18px,4vw,35px);
+    box-shadow:0 15px 35px var(--shadow);
+}
+
+.calendar{
+    display:grid;
+    grid-template-columns:repeat(7,1fr);
+    gap:10px;
+}
+
+.calendar-day-name{
+    text-align:center;
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    padding:8px 2px;
+    color:var(--blue);
+}
+
+.calendar-date{
+    min-height:90px;
+
+    border:1px solid rgba(125,167,217,.25);
+
+    background:var(--blue-light);
+
+    padding:10px;
+
+    text-align:left;
+
+    cursor:pointer;
+
+    color:var(--dark);
+
+    font:inherit;
+
+    transition:.2s;
+
+    position:relative;
+}
+
+.calendar-date:hover{
+    transform:translateY(-3px);
+    background:var(--yellow);
+    box-shadow:0 7px 16px var(--shadow);
+}
+
+.calendar-date.empty{
+    visibility:hidden;
+    pointer-events:none;
+}
+
+.calendar-date.has-entry:after{
+    content:"♡";
+    position:absolute;
+    right:9px;
+    bottom:5px;
+    color:var(--blue);
+    font-size:16px;
+}
+
+.date-number{
+    display:block;
+    font-family:"Cormorant Garamond",serif;
+    font-size:25px;
+    font-weight:700;
+}
+
+.entry-dot{
+    display:block;
+    margin-top:5px;
+    font-size:10px;
+    font-weight:600;
+    opacity:.8;
+}
+
+.entry-panel{
+    display:none;
+
+    margin-top:25px;
+
+    padding:30px;
+
+    background:var(--yellow);
+
+    box-shadow:0 10px 25px var(--shadow);
+}
+
+.entry-panel.show{
+    display:block;
+    animation:pageIn .25s ease;
+}
+
+.entry-panel h3{
+    font-family:"Cormorant Garamond",serif;
+    font-size:34px;
+    margin-bottom:20px;
+}
+
+.entry-form{
+    display:grid;
+    gap:14px;
+}
+
+.entry-form > label{
+    font-size:12px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:1px;
+}
+
+.entry-form textarea{
+    width:100%;
+    border:1px solid rgba(47,72,96,.18);
+    padding:14px;
+    background:var(--white);
+    color:var(--dark);
+    font:inherit;
+    border-radius:8px;
+    min-height:150px;
+    resize:vertical;
+}
+
+.media-actions{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+}
+
+.media-box{
+    background:rgba(255,255,255,.75);
+    padding:15px;
+    border-radius:8px;
+}
+
+.media-box label{
+    font-size:12px;
+    font-weight:700;
+}
+
+.media-box input[type=file]{
+    width:100%;
+    margin-top:8px;
+}
+
+.save-entry{
+    border:none;
+    background:var(--dark);
+    color:var(--white);
+    padding:13px 20px;
+    border-radius:50px;
+    cursor:pointer;
+    font-weight:700;
+    transition:.3s;
+}
+
+.save-entry:hover{
+    background:var(--blue);
+}
+
+.save-entry:disabled{
+    opacity:.6;
+    cursor:not-allowed;
+}
+
+.entry-preview{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+    gap:12px;
+    margin-top:15px;
+}
+
+.entry-preview img{
+    width:100%;
+    max-height:230px;
+    object-fit:cover;
+    border-radius:8px;
+    cursor:pointer;
+    transition:.25s;
+}
+
+.entry-preview img:hover{
+    transform:scale(1.02);
+}
+
+.entry-preview video{
+    width:100%;
+    max-height:230px;
+    border-radius:8px;
+    background:#000;
+}
+
+.media-count{
+    font-size:12px;
+    margin-top:5px;
+    opacity:.75;
+}
+
+/* =========================
+   SCRAPBOOK
+========================= */
+
+.scrapbook-section{
+    background:var(--yellow);
+    position:relative;
+    overflow:hidden;
+}
+
+.scrapbook-section:before,
+.scrapbook-section:after{
+    content:"";
+    position:absolute;
+    width:130px;
+    height:35px;
+    background:var(--blue-light);
+    opacity:.8;
+}
+
+.scrapbook-section:before{
+    top:35px;
+    left:-20px;
+    transform:rotate(-8deg);
+}
+
+.scrapbook-section:after{
+    right:-20px;
+    bottom:40px;
+    transform:rotate(7deg);
+}
+
+.scrapbook-intro{
+    max-width:700px;
+    margin:-25px auto 35px;
+    text-align:center;
+}
+
+.scrapbook-filters{
+    display:flex;
+    justify-content:center;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-bottom:35px;
+}
+
+.scrap-filter{
+    border:2px solid var(--dark);
+    background:var(--white);
+    color:var(--dark);
+
+    padding:10px 18px;
+
+    border-radius:50px;
+
+    font:inherit;
+    font-size:13px;
+    font-weight:700;
+
+    cursor:pointer;
+
+    transition:.25s;
+}
+
+.scrap-filter:hover,
+.scrap-filter.active{
+    background:var(--dark);
+    color:var(--white);
+}
+
+.scrapbook-grid{
+    max-width:1150px;
+    margin:auto;
+
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+
+    gap:28px;
+}
+
+.scrap-card{
+    background:var(--white);
+
+    padding:16px;
+
+    box-shadow:0 12px 28px var(--shadow);
+
+    position:relative;
+
+    transform:rotate(var(--tilt));
+
+    transition:.25s;
+}
+
+.scrap-card:nth-child(3n+2){
+    --tilt:1deg;
+}
+
+.scrap-card:nth-child(3n+1){
+    --tilt:-1deg;
+}
+
+.scrap-card:nth-child(3n){
+    --tilt:.5deg;
+}
+
+.scrap-card:hover{
+    transform:translateY(-6px) rotate(0deg);
+}
+
+.scrap-tape{
+    position:absolute;
+
+    top:-11px;
+    left:50%;
+
+    transform:translateX(-50%) rotate(-2deg);
+
+    width:90px;
+    height:24px;
+
+    background:var(--blue-light);
+
+    opacity:.9;
+
+    z-index:2;
+}
+
+.scrap-date{
+    font-size:11px;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    font-weight:700;
+    color:var(--blue);
+    margin:6px 0 10px;
+}
+
+.scrap-card h3{
+    font-family:"Cormorant Garamond",serif;
+    font-size:27px;
+    margin-bottom:8px;
+}
+
+.scrap-letter{
+    white-space:pre-wrap;
+    font-family:"Cormorant Garamond",serif;
+    font-size:18px;
+    line-height:1.55;
+    margin-bottom:12px;
+}
+
+.scrap-media{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:8px;
+}
+
+.scrap-media img,
+.scrap-media video{
+    width:100%;
+    max-height:240px;
+    object-fit:cover;
+    border-radius:5px;
+    background:#000;
+}
+
+.scrap-media img{
+    cursor:pointer;
+}
+
+.scrap-media video{
+    height:180px;
+}
+
+.scrap-type{
+    display:inline-block;
+    margin-top:12px;
+    padding:4px 9px;
+    border-radius:20px;
+    background:var(--blue-light);
+    font-size:10px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:1px;
+}
+
+.empty-scrapbook{
+    grid-column:1/-1;
+    text-align:center;
+    background:rgba(255,255,255,.75);
+    padding:45px 25px;
+    box-shadow:0 10px 25px var(--shadow);
+}
+
+.empty-scrapbook h3{
+    font-family:"Cormorant Garamond",serif;
+    font-size:34px;
+    margin-bottom:8px;
+}
+
+.scrapbook-note{
+    text-align:center;
+    margin-top:25px;
+    font-size:12px;
+    opacity:.7;
+}
+
+/* =========================
+   PHOTO LIGHTBOX
+========================= */
+
+.photo-lightbox{
+    position:fixed;
+    inset:0;
+
+    background:rgba(15,25,35,.92);
+
+    z-index:5000;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    padding:30px;
+
+    opacity:0;
+    visibility:hidden;
+    pointer-events:none;
+
+    transition:.3s;
+}
+
+.photo-lightbox.show{
+    opacity:1;
+    visibility:visible;
+    pointer-events:auto;
+}
+
+.photo-lightbox img{
+    max-width:95vw;
+    max-height:90vh;
+    object-fit:contain;
+
+    box-shadow:0 20px 60px rgba(0,0,0,.4);
+
+    transform:scale(.92);
+    transition:.3s;
+}
+
+.photo-lightbox.show img{
+    transform:scale(1);
+}
+
+.close-lightbox{
+    position:absolute;
+    top:20px;
+    right:25px;
+
+    width:45px;
+    height:45px;
+
+    border:none;
+    border-radius:50%;
+
+    background:var(--white);
+    color:var(--dark);
+
+    font-size:25px;
+
+    cursor:pointer;
+
+    z-index:2;
+}
+
+.close-lightbox:hover{
+    background:var(--yellow);
+}
+
+/* =========================
+   STATUS TOAST
+========================= */
+
+.toast{
+    position:fixed;
+
+    left:50%;
+    bottom:25px;
+
+    transform:translate(-50%,30px);
+
+    background:var(--dark);
+    color:white;
+
+    padding:12px 20px;
+
+    border-radius:50px;
+
+    font-size:12px;
+    font-weight:600;
+
+    box-shadow:0 10px 30px rgba(0,0,0,.2);
+
+    opacity:0;
+    visibility:hidden;
+
+    z-index:7000;
+
+    transition:.3s;
+}
+
+.toast.show{
+    opacity:1;
+    visibility:visible;
+    transform:translate(-50%,0);
+}
+
+.toast.error{
+    background:#9b4c4c;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:800px){
+
+    nav{
+        flex-direction:column;
+        gap:10px;
+    }
+
+    .nav-right{
+        flex-direction:column;
+        gap:10px;
+    }
+
+    .nav-links{
+        gap:12px;
+        flex-wrap:wrap;
+        justify-content:center;
+    }
+
+    section{
+        padding:70px 5%;
+    }
+
+    .month-grid,
+    .miss-grid,
+    .scrapbook-grid{
+        grid-template-columns:1fr;
+    }
+
+    .countdown{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .letter-popup{
+        padding:45px 25px;
+        max-height:88vh;
+    }
+
+    .letter-popup h3{
+        font-size:32px;
+    }
+
+    .calendar{
+        gap:5px;
+    }
+
+    .calendar-date{
+        min-height:65px;
+        padding:6px;
+    }
+
+    .date-number{
+        font-size:20px;
+    }
+
+    .entry-dot{
+        display:none;
+    }
+
+    .media-actions{
+        grid-template-columns:1fr;
+    }
+
+    .scrap-media{
+        grid-template-columns:1fr;
+    }
+
+    .auth-card{
+        padding:40px 25px;
+    }
+
+    .auth-card h1{
+        font-size:38px;
+    }
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- =========================
+     LOADING SCREEN
+========================= -->
+
+<div id="loadingScreen">
+
+    <div class="loading-inner">
+
+        Our little corner ♡
+
+        <span>Opening our memories...</span>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     AUTH SCREEN
+========================= -->
+
+<div id="authScreen">
+
+    <div class="auth-card">
+
+        <div class="auth-heart">♡</div>
+
+        <div class="small-title">
+            Just for us
+        </div>
+
+        <h1>
+            Our Little
+            <span>Corner</span>
+        </h1>
+
+        <p>
+            Enter your email and password to open our little world.
+        </p>
+
+        <form class="auth-form" id="loginForm">
+
+            <label for="loginEmail">
+                Email
+            </label>
+
+            <input
+                type="email"
+                id="loginEmail"
+                placeholder="your@email.com"
+                autocomplete="email"
+                required
+            >
+
+            <label for="loginPassword">
+                Password
+            </label>
+
+            <input
+                type="password"
+                id="loginPassword"
+                placeholder="Your password"
+                autocomplete="current-password"
+                required
+            >
+
+            <div class="auth-error" id="authError"></div>
+
+            <button
+                type="submit"
+                class="auth-button"
+                id="loginButton"
+            >
+                Open Our Scrapbook ♡
+            </button>
+
+        </form>
+
+        <div class="auth-note">
+            A little place on the internet that belongs to us.
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     NAVIGATION
+========================= -->
+
+<nav>
+
+    <div class="logo">
+        M&K♡
+    </div>
+
+    <div class="nav-right">
+
+        <ul class="nav-links">
+
+            <li>
+                <a href="#beginning">The Beginning</a>
+            </li>
+
+            <li>
+                <a href="#months">Journal</a>
+            </li>
+
+            <li>
+                <a href="#scrapbook">Scrapbook</a>
+            </li>
+
+            <li>
+                <a href="#miss">The Little Things</a>
+            </li>
+
+            <li>
+                <a href="#countdown">Countdown</a>
+            </li>
+
+        </ul>
+
+        <button
+            class="logout-button"
+            id="logoutButton"
+        >
+            Log Out
+        </button>
+
+    </div>
+
+</nav>
+
+
+<!-- =========================
+     HERO
+========================= -->
+
+<section class="hero">
+
+    <div class="hero-content">
+
+        <div class="small-title">
+            A little place for my heart
+        </div>
+
+        <h1>
+            Letters Through
+            <br>
+            <span>Six Months</span>
+        </h1>
+
+        <p>
+            Six months may feel like a long time,
+            but I'll fill every day with little reminders
+            of how much I love you.
+        </p>
+
+        <button
+            class="main-button"
+            id="openLetter"
+        >
+            Open My First Letter ♡
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     FIRST LETTER POP-UP
+========================= -->
+
+<div
+    class="letter-overlay"
+    id="letterOverlay"
+>
+
+    <div
+        class="letter-popup"
+        id="letterPopup"
+    >
+
+        <button
+            class="close-letter"
+            id="closeLetter"
+            aria-label="Close letter"
+        >
+            ×
+        </button>
+
+        <h3>
+            Hi, Love.
+        </h3>
+
+        <p>
+            Before you go, I want you to know this.
+        </p>
+
+        <p>
+            Today is September 04, 2026, and here I am, creating this little website for us. I was working on my portfolio through HTML when I suddenly thought, why not create something for us, too? So, here it is—a little corner of the internet that belongs to us.
+        </p>
+
+        <p>
+            For now, this website is offline, but someday, when you look through it, I hope you can feel how much love went into every little part of it. I hope you appreciate it, even just a little, because I made it with you in mind.
+        </p>
+
+        <p>
+            This will be the journal I've been telling you about. I want to fill these pages with memories, photos, videos, little updates about my days, random thoughts, and letters for you while you're away. Maybe some entries will be long, some will be short, and some might simply say that I missed you a little extra that day.
+        </p>
+
+        <p>
+            Six months sounds like such a long time when we're used to having each other around.
+        </p>
+
+        <p>
+            There will be days when I miss you more than usual. Days when I wish I could simply hug you and stay there for a little while longer. Days when all I want is to hear your voice, tell you about my day, or have you beside me while we're doing absolutely nothing.
+        </p>
+
+        <p>
+            There might also be difficult days. Days when things feel heavy, days when I feel lonely, and days when I wish the six months would pass a little faster.
+        </p>
+
+        <p>
+            But even on those days, I want to remember why we're doing this.
+        </p>
+
+        <p>
+            You're going away to work hard for your dreams, and I am so proud of you for having the courage to take this step. I know it won't always be easy for you either. There will be tiring days, stressful days, and moments when you miss home and miss us.
+        </p>
+
+        <p>
+            So when those days come, please remember that you are loved.
+        </p>
+
+        <p>
+            You have someone here who believes in you, who is proud of you, and who will always be cheering for you from afar.
+        </p>
+
+        <p>
+            Before you go, I want you to be strong. Have faith in yourself, have faith in us, and most importantly, have faith in God. Always pray, especially when things become difficult. Ask Him for strength when you're tired, guidance when you're uncertain, protection wherever you go, and peace when your heart feels heavy.
+        </p>
+
+        <p>
+            Take care of yourself for me.
+        </p>
+
+        <p>
+            Eat properly. Get enough rest whenever you can. Don't push yourself too hard. Be careful wherever you go, and please remember that you don't always have to be strong on your own. If you ever feel tired, scared, or overwhelmed, it's okay to pause, breathe, pray, and remind yourself that you're not alone.
+        </p>
+
+        <p>
+            I may not be physically there beside you, but my heart will be with you through every step.
+        </p>
+
+        <p>
+            And while you're working hard toward your dreams, I'll be here too. I'll be cheering for you, supporting you, growing, learning, and healing myself. I'll keep building my own dreams while patiently waiting for the day when we can finally be together again.
+        </p>
+
+        <p>
+            I don't want these six months to only be about missing you.
+        </p>
+
+        <p>
+            I want them to be about growing.
+        </p>
+
+        <p>
+            Growing individually, growing together, becoming stronger, and learning how to love each other even when distance makes it difficult.
+        </p>
+
+        <p>
+            I want us to come out of these six months knowing that we made it through something that once felt so long and scary.
+        </p>
+
+        <p>
+            And when you finally come home, I hope we can look back at this little journal and laugh at the things I wrote, cry over the memories we made while apart, and realize that somehow, we made it through every single day.
+        </p>
+
+        <p>
+            Until then, this will be my way of keeping a little piece of us close.
+        </p>
+
+        <p>
+            A place where I can leave you pieces of my days.
+        </p>
+
+        <p>
+            A place where our memories can live.
+        </p>
+
+        <p>
+            A place where my words can reach you, even when I can't.
+        </p>
+
+        <p>
+            So, Love, wherever you are when you're reading this, please remember:
+        </p>
+
+        <p>
+            I love you.
+        </p>
+
+        <p>
+            I am proud of you.
+        </p>
+
+        <p>
+            I believe in you.
+        </p>
+
+        <p>
+            I believe in us.
+        </p>
+
+        <p>
+            And no matter how many kilometers are between us, you will always have a home in my heart.
+        </p>
+
+        <p>
+            Don't count the days because they feel long.
+        </p>
+
+        <p>
+            Count the memories.
+        </p>
+
+        <p>
+            Count the little victories.
+        </p>
+
+        <p>
+            Count every prayer.
+        </p>
+
+        <p>
+            We'll get through this.
+        </p>
+
+        <p>
+            One day at a time.
+            <br>
+            One memory at a time.
+            <br>
+            One letter at a time.
+        </p>
+
+        <p>
+            Until six months become six weeks,
+            <br>
+            six weeks become six days,
+            <br>
+            and six days become "Welcome home, Love."
+        </p>
+
+        <p>
+            I love you so much.
+        </p>
+
+        <p>
+            More than these words could ever explain.
+        </p>
+
+        <p>
+            Now go chase your dreams.
+        </p>
+
+        <p>
+            I'll be here, waiting, loving, praying, and cheering for you every step of the way.
+        </p>
+
+        <p>
+            Until we meet again, my love.
+        </p>
+
+        <div class="signature">
+            K♡
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     BEGINNING
+========================= -->
+
+<section
+    id="beginning"
+    class="letter-section"
+>
+
+    <div class="section-title">
+
+        <span>
+            Chapter One
+        </span>
+
+        <h2>
+            The Beginning
+        </h2>
+
+    </div>
+
+    <div
+        style="
+        max-width:850px;
+        margin:auto;
+        text-align:center
+        "
+    >
+
+        <p
+            style="
+            font-family:'Cormorant Garamond',serif;
+            font-size:28px
+            "
+        >
+            The first letter has been opened.
+        </p>
+
+        <p style="margin-top:15px">
+            Keep scrolling to begin our six-month journey.
+        </p>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     SIX MONTHS
+========================= -->
+
+<section
+    id="months"
+    class="months-section"
+>
+
+    <div class="section-title">
+
+        <span>
+            Our Journey
+        </span>
+
+        <h2>
+            Six Months Together, Apart
+        </h2>
+
+    </div>
+
+    <div class="month-grid">
+
+        <button
+            class="month-card"
+            data-month="2026-09"
+        >
+
+            <div class="month-number">
+                01
+            </div>
+
+            <h3>
+                September 2026
+            </h3>
+
+            <p>
+                September 16–30 · The beginning of our journey.
+            </p>
+
+        </button>
+
+
+        <button
+            class="month-card"
+            data-month="2026-10"
+        >
+
+            <div class="month-number">
+                02
+            </div>
+
+            <h3>
+                October 2026
+            </h3>
+
+            <p>
+                A whole month of memories, letters, photos, and little moments.
+            </p>
+
+        </button>
+
+
+        <button
+            class="month-card"
+            data-month="2026-11"
+        >
+
+            <div class="month-number">
+                03
+            </div>
+
+            <h3>
+                November 2026
+            </h3>
+
+            <p>
+                More days apart, more reasons to leave something here for you.
+            </p>
+
+        </button>
+
+
+        <button
+            class="month-card"
+            data-month="2026-12"
+        >
+
+            <div class="month-number">
+                04
+            </div>
+
+            <h3>
+                December 2026
+            </h3>
+
+            <p>
+                Keeping our little memories close through the holidays.
+            </p>
+
+        </button>
+
+
+        <button
+            class="month-card"
+            data-month="2027-01"
+        >
+
+            <div class="month-number">
+                05
+            </div>
+
+            <h3>
+                January 2027
+            </h3>
+
+            <p>
+                A new year, another chapter, and one step closer to home.
+            </p>
+
+        </button>
+
+
+        <button
+            class="month-card"
+            data-month="2027-02"
+        >
+
+            <div class="month-number">
+                06
+            </div>
+
+            <h3>
+                February 2027
+            </h3>
+
+            <p>
+                Almost there. More letters, more memories, more us.
+            </p>
+
+        </button>
+
+
+        <button
+            class="month-card"
+            data-month="2027-03"
+        >
+
+            <div class="month-number">
+                07
+            </div>
+
+            <h3>
+                March 2027
+            </h3>
+
+            <p>
+                March 1–16 · The final little stretch before coming home.
+            </p>
+
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     MONTH PAGES
+========================= -->
+
+<div id="monthPages">
+
+
+<!-- SEPTEMBER -->
+
+<section
+    class="month-page"
+    data-page-month="2026-09"
+>
+
+    <div class="month-page-inner">
+
+        <div class="month-page-header">
+
+            <button class="back-months">
+                ← Back to Our Months
+            </button>
+
+            <h2>
+                September 2026 ♡
+            </h2>
+
+            <p>
+                September 16–30
+            </p>
+
+        </div>
+
+        <div class="calendar-wrap">
+
+            <div
+                class="calendar"
+                data-calendar="2026-09"
+            ></div>
+
+            <div
+                class="entry-panel"
+                data-entry-panel
+            >
+
+                <h3 data-entry-title>
+                    Write something for this day ♡
+                </h3>
+
+                <form class="entry-form">
+
+                    <label>
+                        Letter / Journal Entry
+                    </label>
+
+                    <textarea
+                        data-letter
+                        placeholder="Write your letter here..."
+                    ></textarea>
+
+                    <div class="media-actions">
+
+                        <div class="media-box">
+
+                            <label>
+                                Add images
+                            </label>
+
+                            <input
+                                type="file"
+                                data-images
+                                accept="image/*"
+                                multiple
+                            >
+
+                            <div class="media-count">
+                                You can select multiple photos.
+                            </div>
+
+                        </div>
+
+                        <div class="media-box">
+
+                            <label>
+                                Add videos
+                            </label>
+
+                            <input
+                                type="file"
+                                data-videos
+                                accept="video/*"
+                                multiple
+                            >
+
+                            <div class="media-count">
+                                You can select multiple videos.
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <button
+                        class="save-entry"
+                        type="submit"
+                    >
+                        Add This Memory ♡
+                    </button>
+
+                    <div
+                        class="entry-preview"
+                        data-preview
+                    ></div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- OCTOBER -->
+
+<section
+    class="month-page"
+    data-page-month="2026-10"
+>
+
+    <div class="month-page-inner">
+
+        <div class="month-page-header">
+
+            <button class="back-months">
+                ← Back to Our Months
+            </button>
+
+            <h2>
+                October 2026 ♡
+            </h2>
+
+            <p>
+                Every day is a page in our story.
+            </p>
+
+        </div>
+
+        <div class="calendar-wrap">
+
+            <div
+                class="calendar"
+                data-calendar="2026-10"
+            ></div>
+
+            <div
+                class="entry-panel"
+                data-entry-panel
+            >
+
+                <h3 data-entry-title>
+                    Write something for this day ♡
+                </h3>
+
+                <form class="entry-form">
+
+                    <label>
+                        Letter / Journal Entry
+                    </label>
+
+                    <textarea
+                        data-letter
+                        placeholder="Write your letter here..."
+                    ></textarea>
+
+                    <div class="media-actions">
+
+                        <div class="media-box">
+
+                            <label>
+                                Add images
+                            </label>
+
+                            <input
+                                type="file"
+                                data-images
+                                accept="image/*"
+                                multiple
+                            >
+
+                            <div class="media-count">
+                                You can select multiple photos.
+                            </div>
+
+                        </div>
+
+                        <div class="media-box">
+
+                            <label>
+                                Add videos
+                            </label>
+
+                            <input
+                                type="file"
+                                data-videos
+                                accept="video/*"
+                                multiple
+                            >
+
+                            <div class="media-count">
+                                You can select multiple videos.
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <button
+                        class="save-entry"
+                        type="submit"
+                    >
+                        Add This Memory ♡
+                    </button>
+
+                    <div
+                        class="entry-preview"
+                        data-preview
+                    ></div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- NOVEMBER -->
+
+<section
+    class="month-page"
+    data-page-month="2026-11"
+>
+
+    <div class="month-page-inner">
+
+        <div class="month-page-header">
+
+            <button class="back-months">
+                ← Back to Our Months
+            </button>
+
+            <h2>
+                November 2026 ♡
+            </h2>
+
+            <p>
+                More memories, one day at a time.
+            </p>
+
+        </div>
+
+        <div class="calendar-wrap">
+
+            <div
+                class="calendar"
+                data-calendar="2026-11"
+            ></div>
+
+            <div
+                class="entry-panel"
+                data-entry-panel
+            >
+
+                <h3 data-entry-title>
+                    Write something for this day ♡
+                </h3>
+
+                <form class="entry-form">
+
+                    <label>
+                        Letter / Journal Entry
+                    </label>
+
+                    <textarea
+                        data-letter
+                        placeholder="Write your letter here..."
+                    ></textarea>
+
+                    <div class="media-actions">
+
+                        <div class="media-box">
+
+                            <label>
+                                Add images
+                            </label>
+
+                            <input
+                                type="file"
+                                data-images
+                                accept="image/*"
+                                multiple
+                            >
+
+                            <div class="media-count">
+                                You can select multiple photos.
+                            </div>
+
+                        </div>
+
+                        <div class="media-box">
+
+                            <label>
+                                Add videos
+                            </label>
+
+                            <input
+                                type="file"
+                                data-videos
+                                accept="video/*"
+                                multiple
+                            >
+
+                            <div class="media-count">
+                                You can select multiple videos.
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <button
+                        class="save-entry"
+                        type="submit"
+                    >
+                        Add This Memory ♡
+                    </button>
+
+                    <div
+                        class="entry-preview"
+                        data-preview
+                    ></div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- DECEMBER -->
+
+<section
+    class="month-page"
+    data-page-month="2026-12"
+>
+
+    <div class="month-page-inner">
+
+        <div class="month-page-header">
+
+            <button class="back-months">
+                ← Back to Our Months
+            </button>
+
+            <h2>
+                December 2026 ♡
+            </h2>
+
+            <p>
+                Keeping our little memories close.
+            </p>
+
+        </div>
+
+        <div class="calendar-wrap">
+
+            <div
+                class="calendar"
+                data-calendar="2026-12"
+            ></div>
+
+            <div
+                class="entry-panel"
+                data-entry-panel
+            >
+
+                <h3 data-entry-title>
+                    Write something for this day ♡
+                </h3>
+
+                <form class="entry-form">
+
+                    <label>
+                        Letter / Journal Entry
+                    </label>
+
+                    <textarea
+                        data-letter
+                        placeholder="Write your letter here..."
+                    ></textarea>
+
+                    <div class="media-actions">
+
+                        <div class="media-box">
+
+                            <label>
+                                Add images
+                            </label>
+
+                            <input
+                                type="file"
+                                data-images
+                                accept="image/*"
+                                multiple
+                            >
+
+                            <div class="media-count">
+                                You can select multiple photos.
+                            </div>
+
+                        </div>
+
+                        <div class="media-box">
+
+                            <label>
+                                Add videos
+                            </label>
+
+                            <input
+                                type="file"
+                                data-videos
+                                accept="video/*"
+                                multiple
+                            >
+
+                            <div class="media-count">
+                                You can select multiple videos.
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <button
+                        class="save-entry"
+                        type="submit"
+                    >
+                        Add This Memory ♡
+                    </button>
+
+                    <div
+                        class="entry-preview"
+                        data-preview
+                    ></div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- JANUARY -->
+
+<section
+    class="month-page"
+    data-page-month="2027-01"
+>
+
+    <div class="month-page-inner">
+
+        <div class="month-page-header">
+
+            <button class="back-months">
+                ← Back to Our Months
+            </button>
+
+            <h2>
+                January 2027 ♡
+            </h2>
+
+            <p>
+                A new year, another chapter.
+            </p>
+
+        </div>
+
+        <div class="calendar-wrap">
+
+            <div
+                class="calendar"
+                data-calendar="2027-01"
+            ></div>
+
+            <div
+                class="entry-panel"
+                data-entry-panel
+            >
+
+                <h3 data-entry-title>
+                    Write something for this day ♡
+                </h3>
+
+                <form class="entry-form">
+
+                    <label>
+                        Letter / Journal Entry
+                    </label>
+
+                    <textarea
+                        data-letter
+                        placeholder="Write your letter here..."
+                    ></textarea>
+
+                    <div class="media-actions">
+
+                        <div class="media-box">
+
+                            <label>
+                                Add images
+                            </label>
+
+                            <input
+                                type="file"
+                                data-images
+                                accept="image/*"
+                                multiple
+                            >
+
+                            <div class="media-count">
+                                You can select multiple photos.
+                            </div>
+
+                        </div>
+
+                        <div class="media-box">
+
+                            <label>
+                                Add videos
+                            </label>
+
+                            <input
+                                type="file"
+                                data-videos
+                                accept="video/*"
+                                multiple
+                            >
+
+                            <div class="media-count">
+                                You can select multiple videos.
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <button
+                        class="save-entry"
+                        type="submit"
+                    >
+                        Add This Memory ♡
+                    </button>
+
+                    <div
+                        class="entry-preview"
+                        data-preview
+                    ></div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- FEBRUARY -->
+
+<section
+    class="month-page"
+    data-page-month="2027-02"
+>
+
+    <div class="month-page-inner">
+
+        <div class="month-page-header">
+
+            <button class="back-months">
+                ← Back to Our Months
+            </button>
+
+            <h2>
+                February 2027 ♡
+            </h2>
+
+            <p>
+                Almost there, love.
+            </p>
+
+        </div>
+
+        <div class="calendar-wrap">
+
+            <div
+                class="calendar"
+                data-calendar="2027-02"
+            ></div>
+
+            <div
+                class="entry-panel"
+                data-entry-panel
+            >
+
+                <h3 data-entry-title>
+                    Write something for this day ♡
+                </h3>
+
+                <form class="entry-form">
+
+                    <label>
+                        Letter / Journal Entry
+                    </label>
+
+                    <textarea
+                        data-letter
+                        placeholder="Write your letter here..."
+                    ></textarea>
+
+                    <div class="media-actions">
+
+                        <div class="media-box">
+
+                            <label>
+                                Add images
+                            </label>
+
+                            <input
+                                type="file"
+                                data-images
+                                accept="image/*"
+                                multiple
+                            >
+
+                            <div class="media-count">
+                                You can select multiple photos.
+                            </div>
+
+                        </div>
+
+                        <div class="media-box">
+
+                            <label>
+                                Add videos
+                            </label>
+
+                            <input
+                                type="file"
+                                data-videos
+                                accept="video/*"
+                                multiple
+                            >
+
+                            <div class="media-count">
+                                You can select multiple videos.
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <button
+                        class="save-entry"
+                        type="submit"
+                    >
+                        Add This Memory ♡
+                    </button>
+
+                    <div
+                        class="entry-preview"
+                        data-preview
+                    ></div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- MARCH -->
+
+<section
+    class="month-page"
+    data-page-month="2027-03"
+>
+
+    <div class="month-page-inner">
+
+        <div class="month-page-header">
+
+            <button class="back-months">
+                ← Back to Our Months
+            </button>
+
+            <h2>
+                March 2027 ♡
+            </h2>
+
+            <p>
+                March 1–16 · Welcome home.
+            </p>
+
+        </div>
+
+        <div class="calendar-wrap">
+
+            <div
+                class="calendar"
+                data-calendar="2027-03"
+            ></div>
+
+            <div
+                class="entry-panel"
+                data-entry-panel
+            >
+
+                <h3 data-entry-title>
+                    Write something for this day ♡
+                </h3>
+
+                <form class="entry-form">
+
+                    <label>
+                        Letter / Journal Entry
+                    </label>
+
+                    <textarea
+                        data-letter
+                        placeholder="Write your letter here..."
+                    ></textarea>
+
+                    <div class="media-actions">
+
+                        <div class="media-box">
+
+                            <label>
+                                Add images
+                            </label>
+
+                            <input
+                                type="file"
+                                data-images
+                                accept="image/*"
+                                multiple
+                            >
+
+                            <div class="media-count">
+                                You can select multiple photos.
+                            </div>
+
+                        </div>
+
+                        <div class="media-box">
+
+                            <label>
+                                Add videos
+                            </label>
+
+                            <input
+                                type="file"
+                                data-videos
+                                accept="video/*"
+                                multiple
+                            >
+
+                            <div class="media-count">
+                                You can select multiple videos.
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <button
+                        class="save-entry"
+                        type="submit"
+                    >
+                        Add This Memory ♡
+                    </button>
+
+                    <div
+                        class="entry-preview"
+                        data-preview
+                    ></div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+</div>
+
+
+<!-- =========================
+     SCRAPBOOK
+========================= -->
+
+<section
+    id="scrapbook"
+    class="scrapbook-section"
+>
+
+    <div class="section-title">
+
+        <span>
+            Our Memories
+        </span>
+
+        <h2>
+            Our Little Scrapbook ♡
+        </h2>
+
+    </div>
+
+    <div class="scrapbook-intro">
+
+        <p>
+            Every letter, photo, and video you save in the calendar will automatically become part of our little scrapbook.
+        </p>
+
+    </div>
+
+    <div class="scrapbook-filters">
+
+        <button
+            class="scrap-filter active"
+            data-filter="all"
+        >
+            All Memories
+        </button>
+
+        <button
+            class="scrap-filter"
+            data-filter="letter"
+        >
+            Letters
+        </button>
+
+        <button
+            class="scrap-filter"
+            data-filter="photo"
+        >
+            Photos
+        </button>
+
+        <button
+            class="scrap-filter"
+            data-filter="video"
+        >
+            Videos
+        </button>
+
+    </div>
+
+    <div
+        class="scrapbook-grid"
+        id="scrapbookGrid"
+    ></div>
+
+    <div class="scrapbook-note">
+        Our memories are safely stored in our shared little cloud. ♡
+    </div>
+
+</section>
+
+
+<!-- =========================
+     LITTLE THINGS
+========================= -->
+
+<section
+    id="miss"
+    class="miss-section"
+>
+
+    <div class="section-title">
+
+        <span>
+            The Little Things
+        </span>
+
+        <h2>
+            Things I Miss About You
+        </h2>
+
+    </div>
+
+    <div class="miss-grid">
+
+        <div class="miss-card">
+
+            <div class="miss-icon">
+                ♡
+            </div>
+
+            <h3>
+                Your Hugs
+            </h3>
+
+            <p>
+                The kind that make everything feel okay again.
+            </p>
+
+        </div>
+
+
+        <div class="miss-card">
+
+            <div class="miss-icon">
+                ☁
+            </div>
+
+            <h3>
+                Your Voice
+            </h3>
+
+            <p>
+                Even your random stories that I pretend aren't funny.
+            </p>
+
+        </div>
+
+
+        <div class="miss-card">
+
+            <div class="miss-icon">
+                ☀
+            </div>
+
+            <h3>
+                Your Smile
+            </h3>
+
+            <p>
+                Probably one of my favorite things in the whole world.
+            </p>
+
+        </div>
+
+
+        <div class="miss-card">
+
+            <div class="miss-icon">
+                ♡
+            </div>
+
+            <h3>
+                Our Dates
+            </h3>
+
+            <p>
+                Even the simple ones where we did absolutely nothing.
+            </p>
+
+        </div>
+
+
+        <div class="miss-card">
+
+            <div class="miss-icon">
+                ☕
+            </div>
+
+            <h3>
+                Our Conversations
+            </h3>
+
+            <p>
+                The random conversations that somehow lasted hours.
+            </p>
+
+        </div>
+
+
+        <div class="miss-card">
+
+            <div class="miss-icon">
+                🏠
+            </div>
+
+            <h3>
+                Having You Around
+            </h3>
+
+            <p>
+                Just knowing you're nearby.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     COUNTDOWN
+========================= -->
+
+<section
+    id="countdown"
+    class="countdown-section"
+>
+
+    <div class="section-title">
+
+        <span>
+            September 16, 2026 → March 16, 2027
+        </span>
+
+        <h2>
+            The Countdown
+        </h2>
+
+    </div>
+
+    <div class="countdown">
+
+        <div class="time-box">
+
+            <span id="days">
+                00
+            </span>
+
+            <small>
+                Days
+            </small>
+
+        </div>
+
+
+        <div class="time-box">
+
+            <span id="hours">
+                00
+            </span>
+
+            <small>
+                Hours
+            </small>
+
+        </div>
+
+
+        <div class="time-box">
+
+            <span id="minutes">
+                00
+            </span>
+
+            <small>
+                Minutes
+            </small>
+
+        </div>
+
+
+        <div class="time-box">
+
+            <span id="seconds">
+                00
+            </span>
+
+            <small>
+                Seconds
+            </small>
+
+        </div>
+
+    </div>
+
+    <p
+        class="countdown-note"
+        id="countdownNote"
+    >
+        Counting down to March 16, 2027 ♡
+    </p>
+
+</section>
+
+
+<!-- =========================
+     FINAL
+========================= -->
+
+<section class="final-section">
+
+    <div class="final-letter">
+
+        <h2>
+            Welcome Home, Love. ♡
+        </h2>
+
+        <p>
+            After all those mornings, all those nights, all those days we spent apart...
+        </p>
+
+        <p>
+            I get to have you here again.
+        </p>
+
+        <p>
+            And I hope we never take the little moments for granted.
+        </p>
+
+        <p>
+            Here's to us.
+        </p>
+
+    </div>
+
+</section>
+
+
+<footer>
+
+    Made with love for you ♡
+    <br>
+
+    <span>
+        One day closer, every day.
+    </span>
+
+</footer>
+
+
+<!-- =========================
+     PHOTO LIGHTBOX
+========================= -->
+
+<div
+    class="photo-lightbox"
+    id="photoLightbox"
+>
+
+    <button
+        class="close-lightbox"
+        id="closePhotoLightbox"
+        aria-label="Close photo"
+    >
+        ×
+    </button>
+
+    <img
+        id="lightboxImage"
+        src=""
+        alt="Full-size memory"
+    >
+
+</div>
+
+
+<!-- =========================
+     TOAST
+========================= -->
+
+<div
+    class="toast"
+    id="toast"
+></div>
+
+
+<script>
+
+/* ============================================================
+   SUPABASE CONFIGURATION
+============================================================ */
+
+const SUPABASE_URL =
+    "https://pshmabahupmrdsyscptf.supabase.co";
+
+const SUPABASE_KEY =
+    "sb_publishable_o81kY0gv-rl_CUe2Km_5dg_DpwSg264";
+
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
+const STORAGE_BUCKET =
+    "memories";
+
+
+/* ============================================================
+   DOM ELEMENTS
+============================================================ */
+
+const authScreen =
+    document.getElementById("authScreen");
+
+const loadingScreen =
+    document.getElementById("loadingScreen");
+
+const loginForm =
+    document.getElementById("loginForm");
+
+const loginEmail =
+    document.getElementById("loginEmail");
+
+const loginPassword =
+    document.getElementById("loginPassword");
+
+const loginButton =
+    document.getElementById("loginButton");
+
+const authError =
+    document.getElementById("authError");
+
+const logoutButton =
+    document.getElementById("logoutButton");
+
+const toast =
+    document.getElementById("toast");
+
+
+/* ============================================================
+   HELPERS
+============================================================ */
+
+function showToast(message,error=false){
+
+    toast.textContent = message;
+
+    toast.classList.toggle(
+        "error",
+        error
+    );
+
+    toast.classList.add("show");
+
+    clearTimeout(window.toastTimer);
+
+    window.toastTimer =
+        setTimeout(()=>{
+            toast.classList.remove("show");
+        },3500);
+}
+
+
+function showAuthError(message){
+
+    authError.textContent =
+        message;
+
+    authError.classList.add("show");
+}
+
+
+function clearAuthError(){
+
+    authError.textContent = "";
+
+    authError.classList.remove("show");
+}
+
+
+function showApp(){
+
+    loadingScreen.classList.add("hidden");
+
+    authScreen.classList.add("hidden");
+
+    document.body.style.overflow = "";
+
+}
+
+
+function showLogin(){
+
+    loadingScreen.classList.add("hidden");
+
+    authScreen.classList.remove("hidden");
+
+}
+
+
+function entryId(month,day){
+
+    return month +
+        "-" +
+        String(day).padStart(2,"0");
+
+}
+
+
+/* ============================================================
+   AUTHENTICATION
+============================================================ */
+
+async function login(){
+
+    clearAuthError();
+
+    const email =
+        loginEmail.value.trim();
+
+    const password =
+        loginPassword.value;
+
+    if(!email || !password){
+
+        showAuthError(
+            "Please enter your email and password."
+        );
+
+        return;
+
+    }
+
+    loginButton.disabled = true;
+
+    loginButton.textContent =
+        "Opening our scrapbook... ♡";
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient.auth.signInWithPassword({
+            email,
+            password
+        });
+
+    if(error){
+
+        console.error(error);
+
+        showAuthError(
+            "That email or password isn't correct."
+        );
+
+        loginButton.disabled = false;
+
+        loginButton.textContent =
+            "Open Our Scrapbook ♡";
+
+        return;
+
+    }
+
+    if(data.session){
+
+        loginForm.reset();
+
+        await initializeApp();
+
+    }
+
+}
+
+
+loginForm.addEventListener(
+    "submit",
+    async event => {
+
+        event.preventDefault();
+
+        await login();
+
+    }
+);
+
+
+logoutButton.addEventListener(
+    "click",
+    async ()=>{
+
+        const confirmed =
+            confirm(
+                "Close our little corner for now? ♡"
+            );
+
+        if(!confirmed){
+            return;
+        }
+
+        await supabaseClient.auth.signOut();
+
+        document
+            .querySelectorAll(".month-page")
+            .forEach(page=>{
+                page.classList.remove("active");
+            });
+
+        document
+            .getElementById("months")
+            .style.display = "";
+
+        document
+            .querySelector(".scrapbook-section")
+            .style.display = "";
+
+        document
+            .querySelector(".miss-section")
+            .style.display = "";
+
+        document
+            .querySelector(".countdown-section")
+            .style.display = "";
+
+        document
+            .querySelector(".final-section")
+            .style.display = "";
+
+        showLogin();
+
+    }
+);
+
+
+/* ============================================================
+   AUTH STATE
+============================================================ */
+
+supabaseClient.auth.onAuthStateChange(
+    async (event,session)=>{
+
+        if(session){
+
+            await initializeApp();
+
+        }else{
+
+            showLogin();
+
+        }
+
+    }
+);
+
+
+/* ============================================================
+   SUPABASE DATABASE
+============================================================ */
+
+async function readRawEntry(month,day){
+
+    const id =
+        entryId(month,day);
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("entries")
+            .select("*")
+            .eq("id",id)
+            .maybeSingle();
+
+    if(error){
+
+        console.error(
+            "Could not read entry:",
+            error
+        );
+
+        throw error;
+
+    }
+
+    return data || null;
+
+}
+
+
+async function getAllRawEntries(){
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("entries")
+            .select("*");
+
+    if(error){
+
+        console.error(
+            "Could not load entries:",
+            error
+        );
+
+        throw error;
+
+    }
+
+    return data || [];
+
+}
+
+
+async function saveRawEntry(entry){
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("entries")
+            .upsert(
+                {
+                    id:entry.id,
+                    month:entry.month,
+                    day:entry.day,
+                    letter:entry.letter || "",
+                    images:entry.images || [],
+                    videos:entry.videos || [],
+                    updated_at:new Date().toISOString()
+                },
+                {
+                    onConflict:"id"
+                }
+            )
+            .select()
+            .single();
+
+    if(error){
+
+        console.error(
+            "Could not save entry:",
+            error
+        );
+
+        throw error;
+
+    }
+
+    return data;
+
+}
+
+
+/* ============================================================
+   STORAGE
+============================================================ */
+
+function createSafeFileName(file){
+
+    const extension =
+        file.name.includes(".")
+            ? file.name
+                .split(".")
+                .pop()
+                .toLowerCase()
+            : "bin";
+
+    const random =
+        crypto.randomUUID();
+
+    return random +
+        "." +
+        extension;
+
+}
+
+
+async function uploadFile(
+    file,
+    month,
+    day,
+    type
+){
+
+    const path =
+        "entries/" +
+        entryId(month,day) +
+        "/" +
+        type +
+        "/" +
+        createSafeFileName(file);
+
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .storage
+            .from(STORAGE_BUCKET)
+            .upload(
+                path,
+                file,
+                {
+                    cacheControl:"3600",
+                    upsert:false
+                }
+            );
+
+
+    if(error){
+
+        console.error(
+            "Upload failed:",
+            error
+        );
+
+        throw error;
+
+    }
+
+    return path;
+
+}
+
+
+async function uploadFiles(
+    files,
+    month,
+    day,
+    type
+){
+
+    const paths = [];
+
+    for(const file of files){
+
+        const path =
+            await uploadFile(
+                file,
+                month,
+                day,
+                type
+            );
+
+        paths.push(path);
+
+    }
+
+    return paths;
+
+}
+
+
+/* ============================================================
+   SIGNED URLS
+============================================================ */
+
+async function getSignedUrl(path){
+
+    if(!path){
+        return null;
+    }
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .storage
+            .from(STORAGE_BUCKET)
+            .createSignedUrl(
+                path,
+                3600
+            );
+
+    if(error){
+
+        console.error(
+            "Could not create signed URL:",
+            error
+        );
+
+        return null;
+
+    }
+
+    return data?.signedUrl || null;
+
+}
+
+
+async function addSignedUrls(entry){
+
+    if(!entry){
+        return null;
+    }
+
+    const imagePaths =
+        Array.isArray(entry.images)
+            ? entry.images
+            : [];
+
+    const videoPaths =
+        Array.isArray(entry.videos)
+            ? entry.videos
+            : [];
+
+
+    const imageUrls =
+        await Promise.all(
+            imagePaths.map(
+                path => getSignedUrl(path)
+            )
+        );
+
+
+    const videoUrls =
+        await Promise.all(
+            videoPaths.map(
+                path => getSignedUrl(path)
+            )
+        );
+
+
+    return {
+        ...entry,
+        imageUrls:imageUrls.filter(Boolean),
+        videoUrls:videoUrls.filter(Boolean)
+    };
+
+}
+
+
+async function readEntry(month,day){
+
+    const entry =
+        await readRawEntry(
+            month,
+            day
+        );
+
+    return addSignedUrls(entry);
+
+}
+
+
+async function getAllEntries(){
+
+    const entries =
+        await getAllRawEntries();
+
+    return Promise.all(
+        entries.map(
+            entry => addSignedUrls(entry)
+        )
+    );
+
+}
+
+
+/* ============================================================
+   FIRST LETTER
+============================================================ */
+
+const openLetter =
+    document.getElementById("openLetter");
+
+const closeLetter =
+    document.getElementById("closeLetter");
+
+const letterOverlay =
+    document.getElementById("letterOverlay");
+
+
+function showLetter(){
+
+    letterOverlay.classList.add("show");
+
+    document.body.classList.add(
+        "modal-open"
+    );
+
+}
+
+
+function hideLetter(){
+
+    letterOverlay.classList.remove("show");
+
+    document.body.classList.remove(
+        "modal-open"
+    );
+
+}
+
+
+openLetter.addEventListener(
+    "click",
+    showLetter
+);
+
+
+closeLetter.addEventListener(
+    "click",
+    hideLetter
+);
+
+
+letterOverlay.addEventListener(
+    "click",
+    event => {
+
+        if(
+            event.target ===
+            letterOverlay
+        ){
+
+            hideLetter();
+
+        }
+
+    }
+);
+
+
+/* ============================================================
+   KEYBOARD
+============================================================ */
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+        if(event.key === "Escape"){
+
+            hideLetter();
+
+            closePhotoLightbox();
+
+        }
+
+    }
+);
+
+
+/* ============================================================
+   COUNTDOWN
+============================================================ */
+
+const journeyStart =
+    new Date(
+        "2026-09-16T00:00:00"
+    ).getTime();
+
+const journeyEnd =
+    new Date(
+        "2027-03-16T00:00:00"
+    ).getTime();
+
+
+function updateCountdown(){
+
+    const now =
+        Date.now();
+
+    const note =
+        document.getElementById(
+            "countdownNote"
+        );
+
+
+    if(now < journeyStart){
+
+        setCountdown(
+            0,
+            0,
+            0,
+            0
+        );
+
+        note.textContent =
+            "Our six-month countdown will begin on September 16, 2026 ♡";
+
+        return;
+
+    }
+
+
+    const difference =
+        journeyEnd - now;
+
+
+    if(difference <= 0){
+
+        setCountdown(
+            0,
+            0,
+            0,
+            0
+        );
+
+        note.textContent =
+            "Welcome home, Love. ♡";
+
+        return;
+
+    }
+
+
+    const days =
+        Math.floor(
+            difference /
+            86400000
+        );
+
+    const hours =
+        Math.floor(
+            (
+                difference %
+                86400000
+            ) /
+            3600000
+        );
+
+    const minutes =
+        Math.floor(
+            (
+                difference %
+                3600000
+            ) /
+            60000
+        );
+
+    const seconds =
+        Math.floor(
+            (
+                difference %
+                60000
+            ) /
+            1000
+        );
+
+
+    setCountdown(
+        days,
+        hours,
+        minutes,
+        seconds
+    );
+
+
+    note.textContent =
+        "Counting down to March 16, 2027 ♡";
+
+}
+
+
+function setCountdown(
+    days,
+    hours,
+    minutes,
+    seconds
+){
+
+    document.getElementById(
+        "days"
+    ).textContent =
+        String(days).padStart(2,"0");
+
+    document.getElementById(
+        "hours"
+    ).textContent =
+        String(hours).padStart(2,"0");
+
+    document.getElementById(
+        "minutes"
+    ).textContent =
+        String(minutes).padStart(2,"0");
+
+    document.getElementById(
+        "seconds"
+    ).textContent =
+        String(seconds).padStart(2,"0");
+
+}
+
+
+updateCountdown();
+
+setInterval(
+    updateCountdown,
+    1000
+);
+
+
+/* ============================================================
+   MONTH NAVIGATION
+============================================================ */
+
+const monthCards =
+    document.querySelectorAll(
+        ".month-card"
+    );
+
+const monthPages =
+    document.querySelectorAll(
+        ".month-page"
+    );
+
+const monthsSection =
+    document.getElementById(
+        "months"
+    );
+
+
+function openMonth(monthKey){
+
+    monthPages.forEach(
+        page => {
+
+            page.classList.toggle(
+                "active",
+                page.dataset.pageMonth === monthKey
+            );
+
+        }
+    );
+
+
+    monthsSection.style.display =
+        "none";
+
+
+    document.querySelector(
+        ".scrapbook-section"
+    ).style.display =
+        "none";
+
+
+    document.querySelector(
+        ".miss-section"
+    ).style.display =
+        "none";
+
+
+    document.querySelector(
+        ".countdown-section"
+    ).style.display =
+        "none";
+
+
+    document.querySelector(
+        ".final-section"
+    ).style.display =
+        "none";
+
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+
+}
+
+
+function closeMonth(){
+
+    monthPages.forEach(
+        page =>
+            page.classList.remove(
+                "active"
+            )
+    );
+
+
+    monthsSection.style.display =
+        "";
+
+
+    document.querySelector(
+        ".scrapbook-section"
+    ).style.display =
+        "";
+
+
+    document.querySelector(
+        ".miss-section"
+    ).style.display =
+        "";
+
+
+    document.querySelector(
+        ".countdown-section"
+    ).style.display =
+        "";
+
+
+    document.querySelector(
+        ".final-section"
+    ).style.display =
+        "";
+
+
+    monthsSection.scrollIntoView({
+        behavior:"smooth"
+    });
+
+}
+
+
+monthCards.forEach(
+    card => {
+
+        card.addEventListener(
+            "click",
+            () =>
+                openMonth(
+                    card.dataset.month
+                )
+        );
+
+    }
+);
+
+
+document.querySelectorAll(
+    ".back-months"
+).forEach(
+    button => {
+
+        button.addEventListener(
+            "click",
+            closeMonth
+        );
+
+    }
+);
+
+
+/* ============================================================
+   CALENDARS
+============================================================ */
+
+const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December"
+];
+
+
+async function buildCalendar(calendar){
+
+    calendar.innerHTML = "";
+
+    const key =
+        calendar.dataset.calendar;
+
+    const [
+        year,
+        month
+    ] =
+        key
+            .split("-")
+            .map(Number);
+
+
+    const firstDay =
+        new Date(
+            year,
+            month - 1,
+            1
+        ).getDay();
+
+
+    let firstDate = 1;
+
+
+    let lastDay =
+        new Date(
+            year,
+            month,
+            0
+        ).getDate();
+
+
+    if(key === "2026-09"){
+
+        firstDate = 16;
+
+    }
+
+
+    if(key === "2027-03"){
+
+        lastDay = 16;
+
+    }
+
+
+    [
+        "Sun",
+        "Mon",
+        "Tue",
+        "Wed",
+        "Thu",
+        "Fri",
+        "Sat"
+    ].forEach(
+        name => {
+
+            const header =
+                document.createElement(
+                    "div"
+                );
+
+            header.className =
+                "calendar-day-name";
+
+            header.textContent =
+                name;
+
+            calendar.appendChild(
+                header
+            );
+
+        }
+    );
+
+
+    const blanks =
+        key === "2026-09"
+            ? new Date(
+                year,
+                month - 1,
+                16
+            ).getDay()
+            : firstDay;
+
+
+    for(
+        let i = 0;
+        i < blanks;
+        i++
+    ){
+
+        const blank =
+            document.createElement(
+                "button"
+            );
+
+        blank.className =
+            "calendar-date empty";
+
+        calendar.appendChild(
+            blank
+        );
+
+    }
+
+
+    for(
+        let day = firstDate;
+        day <= lastDay;
+        day++
+    ){
+
+        const button =
+            document.createElement(
+                "button"
+            );
+
+        button.className =
+            "calendar-date";
+
+
+        const number =
+            document.createElement(
+                "span"
+            );
+
+        number.className =
+            "date-number";
+
+        number.textContent =
+            day;
+
+
+        button.appendChild(
+            number
+        );
+
+
+        try{
+
+            const entry =
+                await readRawEntry(
+                    key,
+                    day
+                );
+
+
+            if(
+                entry &&
+                (
+                    entry.letter ||
+                    entry.images?.length ||
+                    entry.videos?.length
+                )
+            ){
+
+                button.classList.add(
+                    "has-entry"
+                );
+
+
+                const mediaCount =
+                    (
+                        entry.images?.length || 0
+                    ) +
+                    (
+                        entry.videos?.length || 0
+                    );
+
+
+                const status =
+                    document.createElement(
+                        "span"
+                    );
+
+                status.className =
+                    "entry-dot";
+
+
+                status.textContent =
+                    entry.letter
+                        ? `Memory saved${
+                            mediaCount
+                                ? ` · ${mediaCount} media`
+                                : ""
+                          }`
+                        : `${mediaCount} media saved`;
+
+
+                button.appendChild(
+                    status
+                );
+
+            }
+
+        }catch(error){
+
+            console.error(
+                "Calendar entry error:",
+                error
+            );
+
+        }
+
+
+        button.addEventListener(
+            "click",
+            () =>
+                openEntry(
+                    calendar,
+                    key,
+                    day
+                )
+        );
+
+
+        calendar.appendChild(
+            button
+        );
+
+    }
+
+}
+
+
+/* ============================================================
+   OPEN JOURNAL ENTRY
+============================================================ */
+
+async function openEntry(
+    calendar,
+    key,
+    day
+){
+
+    const panel =
+        calendar.parentElement
+            .querySelector(
+                "[data-entry-panel]"
+            );
+
+
+    const [
+        year,
+        month
+    ] =
+        key
+            .split("-")
+            .map(Number);
+
+
+    panel.querySelector(
+        "[data-entry-title]"
+    ).textContent =
+        `${monthNames[month-1]} ${day}, ${year} ♡`;
+
+
+    let entry =
+        await readEntry(
+            key,
+            day
+        );
+
+
+    if(!entry){
+
+        entry = {
+            id:entryId(key,day),
+            month:key,
+            day,
+            letter:"",
+            images:[],
+            videos:[],
+            imageUrls:[],
+            videoUrls:[]
+        };
+
+    }
+
+
+    panel.querySelector(
+        "[data-letter]"
+    ).value =
+        entry.letter || "";
+
+
+    panel.querySelector(
+        "[data-images]"
+    ).value = "";
+
+
+    panel.querySelector(
+        "[data-videos]"
+    ).value = "";
+
+
+    panel.dataset.activeDay =
+        day;
+
+
+    panel.dataset.activeMonth =
+        key;
+
+
+    panel.classList.add(
+        "show"
+    );
+
+
+    await renderPreview(
+        panel,
+        entry
+    );
+
+
+    panel.scrollIntoView({
+        behavior:"smooth",
+        block:"nearest"
+    });
+
+}
+
+
+/* ============================================================
+   PREVIEW
+============================================================ */
+
+async function renderPreview(
+    panel,
+    entry
+){
+
+    const preview =
+        panel.querySelector(
+            "[data-preview]"
+        );
+
+
+    preview.innerHTML = "";
+
+
+    if(!entry){
+        return;
+    }
+
+
+    if(entry.letter){
+
+        const letter =
+            document.createElement(
+                "div"
+            );
+
+        letter.style.gridColumn =
+            "1/-1";
+
+        letter.style.whiteSpace =
+            "pre-wrap";
+
+        letter.style.fontFamily =
+            '"Cormorant Garamond",serif';
+
+        letter.style.fontSize =
+            "18px";
+
+        letter.textContent =
+            entry.letter;
+
+        preview.appendChild(
+            letter
+        );
+
+    }
+
+
+    (
+        entry.imageUrls || []
+    ).forEach(
+        url => {
+
+            const image =
+                document.createElement(
+                    "img"
+                );
+
+            image.src =
+                url;
+
+            image.alt =
+                "Saved memory";
+
+            image.addEventListener(
+                "click",
+                () =>
+                    openPhotoLightbox(
+                        url
+                    )
+            );
+
+            preview.appendChild(
+                image
+            );
+
+        }
+    );
+
+
+    (
+        entry.videoUrls || []
+    ).forEach(
+        url => {
+
+            const video =
+                document.createElement(
+                    "video"
+                );
+
+            video.src =
+                url;
+
+            video.controls =
+                true;
+
+            video.preload =
+                "metadata";
+
+            preview.appendChild(
+                video
+            );
+
+        }
+    );
+
+}
+
+
+/* ============================================================
+   SAVE ENTRY
+   MEDIA IS ALWAYS APPENDED
+============================================================ */
+
+document.querySelectorAll(
+    ".entry-form"
+).forEach(
+    form => {
+
+        form.addEventListener(
+            "submit",
+            async event => {
+
+                event.preventDefault();
+
+
+                const panel =
+                    form.closest(
+                        "[data-entry-panel]"
+                    );
+
+
+                const month =
+                    panel.dataset.activeMonth;
+
+
+                const day =
+                    Number(
+                        panel.dataset.activeDay
+                    );
+
+
+                if(!month || !day){
+
+                    showToast(
+                        "Please choose a date first.",
+                        true
+                    );
+
+                    return;
+
+                }
+
+
+                const saveButton =
+                    form.querySelector(
+                        ".save-entry"
+                    );
+
+
+                saveButton.disabled =
+                    true;
+
+                saveButton.textContent =
+                    "Saving our memory... ♡";
+
+
+                try{
+
+                    const old =
+                        await readRawEntry(
+                            month,
+                            day
+                        ) ||
+                        {
+                            id:entryId(
+                                month,
+                                day
+                            ),
+                            month,
+                            day,
+                            letter:"",
+                            images:[],
+                            videos:[]
+                        };
+
+
+                    const newImages =
+                        Array.from(
+                            form.querySelector(
+                                "[data-images]"
+                            ).files || []
+                        );
+
+
+                    const newVideos =
+                        Array.from(
+                            form.querySelector(
+                                "[data-videos]"
+                            ).files || []
+                        );
+
+
+                    /*
+                       Upload the new files.
+                       Existing file paths remain untouched.
+                    */
+
+                    let uploadedImages = [];
+
+                    let uploadedVideos = [];
+
+
+                    if(newImages.length){
+
+                        uploadedImages =
+                            await uploadFiles(
+                                newImages,
+                                month,
+                                day,
+                                "images"
+                            );
+
+                    }
+
+
+                    if(newVideos.length){
+
+                        uploadedVideos =
+                            await uploadFiles(
+                                newVideos,
+                                month,
+                                day,
+                                "videos"
+                            );
+
+                    }
+
+
+                    const entry = {
+
+                        id:old.id,
+
+                        month,
+
+                        day,
+
+                        letter:
+                            form.querySelector(
+                                "[data-letter]"
+                            ).value,
+
+                        images:[
+                            ...(Array.isArray(old.images)
+                                ? old.images
+                                : []),
+                            ...uploadedImages
+                        ],
+
+                        videos:[
+                            ...(Array.isArray(old.videos)
+                                ? old.videos
+                                : []),
+                            ...uploadedVideos
+                        ]
+
+                    };
+
+
+                    await saveRawEntry(
+                        entry
+                    );
+
+
+                    form.querySelector(
+                        "[data-images]"
+                    ).value = "";
+
+
+                    form.querySelector(
+                        "[data-videos]"
+                    ).value = "";
+
+
+                    const calendar =
+                        form.closest(
+                            ".calendar-wrap"
+                        ).querySelector(
+                            ".calendar"
+                        );
+
+
+                    await buildCalendar(
+                        calendar
+                    );
+
+
+                    await renderScrapbook();
+
+
+                    panel.classList.remove(
+                        "show"
+                    );
+
+
+                    delete panel.dataset.activeDay;
+
+                    delete panel.dataset.activeMonth;
+
+
+                    form.querySelector(
+                        "[data-letter]"
+                    ).value = "";
+
+
+                    showToast(
+                        "Your memory has been added to our scrapbook ♡"
+                    );
+
+
+                }catch(error){
+
+                    console.error(
+                        "Save error:",
+                        error
+                    );
+
+
+                    showToast(
+                        "Something went wrong while saving your memory.",
+                        true
+                    );
+
+                }finally{
+
+                    saveButton.disabled =
+                        false;
+
+                    saveButton.textContent =
+                        "Add This Memory ♡";
+
+                }
+
+            }
+        );
+
+    }
+);
+
+
+/* ============================================================
+   SCRAPBOOK
+============================================================ */
+
+let currentFilter =
+    "all";
+
+
+function formatDate(
+    month,
+    day
+){
+
+    const [
+        year,
+        monthNumber
+    ] =
+        month
+            .split("-")
+            .map(Number);
+
+
+    return `${
+        monthNames[monthNumber - 1]
+    } ${day}, ${year}`;
+
+}
+
+
+function addScrapCard(
+    grid,
+    {
+        date,
+        title,
+        type,
+        content,
+        media
+    }
+){
+
+    const card =
+        document.createElement(
+            "article"
+        );
+
+
+    card.className =
+        "scrap-card";
+
+
+    const tape =
+        document.createElement(
+            "div"
+        );
+
+    tape.className =
+        "scrap-tape";
+
+    card.appendChild(
+        tape
+    );
+
+
+    const dateElement =
+        document.createElement(
+            "div"
+        );
+
+    dateElement.className =
+        "scrap-date";
+
+    dateElement.textContent =
+        date;
+
+    card.appendChild(
+        dateElement
+    );
+
+
+    const heading =
+        document.createElement(
+            "h3"
+        );
+
+    heading.textContent =
+        title;
+
+    card.appendChild(
+        heading
+    );
+
+
+    if(content){
+
+        const letter =
+            document.createElement(
+                "div"
+            );
+
+        letter.className =
+            "scrap-letter";
+
+        letter.textContent =
+            content;
+
+        card.appendChild(
+            letter
+        );
+
+    }
+
+
+    if(media?.length){
+
+        const mediaWrap =
+            document.createElement(
+                "div"
+            );
+
+        mediaWrap.className =
+            "scrap-media";
+
+
+        media.forEach(
+            item => {
+
+                if(item.kind === "photo"){
+
+                    const image =
+                        document.createElement(
+                            "img"
+                        );
+
+                    image.src =
+                        item.url;
+
+                    image.alt =
+                        "Scrapbook photo";
+
+
+                    image.addEventListener(
+                        "click",
+                        () =>
+                            openPhotoLightbox(
+                                item.url
+                            )
+                    );
+
+
+                    mediaWrap.appendChild(
+                        image
+                    );
+
+                }else{
+
+                    const video =
+                        document.createElement(
+                            "video"
+                        );
+
+                    video.src =
+                        item.url;
+
+                    video.controls =
+                        true;
+
+                    video.preload =
+                        "metadata";
+
+
+                    mediaWrap.appendChild(
+                        video
+                    );
+
+                }
+
+            }
+        );
+
+
+        card.appendChild(
+            mediaWrap
+        );
+
+    }
+
+
+    const badge =
+        document.createElement(
+            "span"
+        );
+
+    badge.className =
+        "scrap-type";
+
+    badge.textContent =
+        type;
+
+    card.appendChild(
+        badge
+    );
+
+
+    grid.appendChild(
+        card
+    );
+
+}
+
+
+async function renderScrapbook(){
+
+    const grid =
+        document.getElementById(
+            "scrapbookGrid"
+        );
+
+
+    grid.innerHTML = "";
+
+
+    let entries;
+
+
+    try{
+
+        entries =
+            await getAllEntries();
+
+    }catch(error){
+
+        console.error(error);
+
+        grid.innerHTML =
+            `
+            <div class="empty-scrapbook">
+                <h3>Our scrapbook is resting ♡</h3>
+                <p>
+                    We couldn't load our memories right now.
+                </p>
+            </div>
+            `;
+
+        return;
+
+    }
+
+
+    entries.sort(
+        (a,b) => {
+
+            const monthCompare =
+                a.month.localeCompare(
+                    b.month
+                );
+
+
+            return monthCompare !== 0
+                ? monthCompare
+                : Number(a.day) -
+                  Number(b.day);
+
+        }
+    );
+
+
+    let visibleCount =
+        0;
+
+
+    entries.forEach(
+        entry => {
+
+            const date =
+                formatDate(
+                    entry.month,
+                    entry.day
+                );
+
+
+            const hasLetter =
+                !!entry.letter;
+
+
+            const photos =
+                entry.imageUrls || [];
+
+
+            const videos =
+                entry.videoUrls || [];
+
+
+            if(
+                (
+                    currentFilter === "all" ||
+                    currentFilter === "letter"
+                ) &&
+                hasLetter
+            ){
+
+                addScrapCard(
+                    grid,
+                    {
+                        date,
+                        title:"A Letter For You ♡",
+                        type:"Letter",
+                        content:entry.letter
+                    }
+                );
+
+                visibleCount++;
+
+            }
+
+
+            if(
+                (
+                    currentFilter === "all" ||
+                    currentFilter === "photo"
+                ) &&
+                photos.length
+            ){
+
+                addScrapCard(
+                    grid,
+                    {
+                        date,
+                        title:"A Little Picture ♡",
+                        type:`Photos · ${photos.length}`,
+                        media:
+                            photos.map(
+                                url => ({
+                                    kind:"photo",
+                                    url
+                                })
+                            )
+                    }
+                );
+
+                visibleCount++;
+
+            }
+
+
+            if(
+                (
+                    currentFilter === "all" ||
+                    currentFilter === "video"
+                ) &&
+                videos.length
+            ){
+
+                addScrapCard(
+                    grid,
+                    {
+                        date,
+                        title:"A Little Moment ♡",
+                        type:`Videos · ${videos.length}`,
+                        media:
+                            videos.map(
+                                url => ({
+                                    kind:"video",
+                                    url
+                                })
+                            )
+                    }
+                );
+
+                visibleCount++;
+
+            }
+
+        }
+    );
+
+
+    if(!visibleCount){
+
+        const empty =
+            document.createElement(
+                "div"
+            );
+
+        empty.className =
+            "empty-scrapbook";
+
+
+        empty.innerHTML =
+            `
+            <h3>No memories here yet ♡</h3>
+            <p>
+                Open a date in the journal and add a letter,
+                photos, or videos.
+            </p>
+            `;
+
+
+        grid.appendChild(
+            empty
+        );
+
+    }
+
+}
+
+
+/* ============================================================
+   SCRAPBOOK FILTERS
+============================================================ */
+
+document.querySelectorAll(
+    ".scrap-filter"
+).forEach(
+    button => {
+
+        button.addEventListener(
+            "click",
+            async ()=>{
+
+                document
+                    .querySelectorAll(
+                        ".scrap-filter"
+                    )
+                    .forEach(
+                        filter =>
+                            filter.classList.remove(
+                                "active"
+                            )
+                    );
+
+
+                button.classList.add(
+                    "active"
+                );
+
+
+                currentFilter =
+                    button.dataset.filter;
+
+
+                await renderScrapbook();
+
+            }
+        );
+
+    }
+);
+
+
+/* ============================================================
+   PHOTO LIGHTBOX
+============================================================ */
+
+const photoLightbox =
+    document.getElementById(
+        "photoLightbox"
+    );
+
+const lightboxImage =
+    document.getElementById(
+        "lightboxImage"
+    );
+
+const closePhotoButton =
+    document.getElementById(
+        "closePhotoLightbox"
+    );
+
+
+function openPhotoLightbox(url){
+
+    if(!url){
+        return;
+    }
+
+    lightboxImage.src =
+        url;
+
+    photoLightbox.classList.add(
+        "show"
+    );
+
+    document.body.classList.add(
+        "modal-open"
+    );
+
+}
+
+
+function closePhotoLightbox(){
+
+    photoLightbox.classList.remove(
+        "show"
+    );
+
+    lightboxImage.src =
+        "";
+
+    document.body.classList.remove(
+        "modal-open"
+    );
+
+}
+
+
+closePhotoButton.addEventListener(
+    "click",
+    closePhotoLightbox
+);
+
+
+photoLightbox.addEventListener(
+    "click",
+    event => {
+
+        if(
+            event.target ===
+            photoLightbox
+        ){
+
+            closePhotoLightbox();
+
+        }
+
+    }
+);
+
+
+/* ============================================================
+   INITIALIZE APPLICATION
+============================================================ */
+
+let appInitialized =
+    false;
+
+
+async function initializeApp(){
+
+    if(appInitialized){
+
+        showApp();
+
+        return;
+
+    }
+
+
+    try{
+
+        /*
+           Build all calendars.
+        */
+
+        for(
+            const calendar of
+            document.querySelectorAll(
+                ".calendar"
+            )
+        ){
+
+            await buildCalendar(
+                calendar
+            );
+
+        }
+
+
+        /*
+           Load the shared scrapbook.
+        */
+
+        await renderScrapbook();
+
+
+        appInitialized =
+            true;
+
+
+        showApp();
+
+
+    }catch(error){
+
+        console.error(
+            "Application initialization failed:",
+            error
+        );
+
+
+        showLogin();
+
+
+        showAuthError(
+            "We couldn't open our scrapbook right now. Please try again."
+        );
+
+    }
+
+}
+
+
+/* ============================================================
+   STARTUP
+============================================================ */
+
+(async function(){
+
+    try{
+
+        const {
+            data
+        } =
+            await supabaseClient.auth.getSession();
+
+
+        if(data?.session){
+
+            await initializeApp();
+
+        }else{
+
+            showLogin();
+
+        }
+
+    }catch(error){
+
+        console.error(
+            "Authentication startup error:",
+            error
+        );
+
+        showLogin();
+
+    }
+
+})();
+
+</script>
+
+</body>
+</html>
