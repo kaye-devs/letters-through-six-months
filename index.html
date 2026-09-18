@@ -4022,12 +4022,7 @@ async function login(){
 
         loginForm.reset();
 
-        /* Show the app immediately after authentication.
-           Heavy calendar/media work happens in the background. */
-        showApp();
-        initializeApp().catch(error => {
-            console.error("Background initialization failed:", error);
-        });
+        await initializeApp();
 
     }
 
@@ -4100,14 +4095,11 @@ logoutButton.addEventListener(
 ============================================================ */
 
 supabaseClient.auth.onAuthStateChange(
-    (event,session)=>{
+    async (event,session)=>{
 
         if(session){
 
-            showApp();
-            initializeApp().catch(error => {
-                console.error("Background initialization failed:", error);
-            });
+            await initializeApp();
 
         }else{
 
@@ -4154,56 +4146,29 @@ async function readRawEntry(month,day){
 }
 
 
-let entriesCache = null;
-let entriesCachePromise = null;
+async function getAllRawEntries(){
 
-async function getAllRawEntries(forceRefresh=false){
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("entries")
+            .select("*");
 
-    if(!forceRefresh && Array.isArray(entriesCache)){
-        return entriesCache;
-    }
+    if(error){
 
-    if(!forceRefresh && entriesCachePromise){
-        return entriesCachePromise;
-    }
-
-    entriesCachePromise = (async ()=>{
-
-        const {
-            data,
+        console.error(
+            "Could not load entries:",
             error
-        } =
-            await supabaseClient
-                .from("entries")
-                .select("*");
+        );
 
-        if(error){
+        throw error;
 
-            console.error(
-                "Could not load entries:",
-                error
-            );
-
-            throw error;
-
-        }
-
-        entriesCache = data || [];
-        return entriesCache;
-
-    })();
-
-    try{
-        return await entriesCachePromise;
-    }finally{
-        entriesCachePromise = null;
     }
 
-}
+    return data || [];
 
-function invalidateEntriesCache(){
-    entriesCache = null;
-    entriesCachePromise = null;
 }
 
 
@@ -4243,7 +4208,6 @@ async function saveRawEntry(entry){
 
     }
 
-    invalidateEntriesCache();
     return data;
 
 }
@@ -4976,15 +4940,6 @@ async function buildCalendar(calendar){
     }
 
 
-    /*
-       Load entries once instead of making one Supabase request
-       for every calendar day. This makes login and navigation much faster.
-    */
-    const allEntries = await getAllRawEntries();
-    const entryById = new Map(
-        allEntries.map(entry => [entry.id, entry])
-    );
-
     for(
         let day = firstDate;
         day <= lastDay;
@@ -5020,9 +4975,10 @@ async function buildCalendar(calendar){
         try{
 
             const entry =
-                entryById.get(
-                    entryId(key, day)
-                ) || null;
+                await readRawEntry(
+                    key,
+                    day
+                );
 
 
             if(
@@ -6352,67 +6308,68 @@ photoLightbox.addEventListener(
 let appInitialized =
     false;
 
-let appInitializationPromise =
-    null;
-
 
 async function initializeApp(){
 
     if(appInitialized){
+
         showApp();
+
         return;
+
     }
 
-    if(appInitializationPromise){
-        return appInitializationPromise;
-    }
 
-    appInitializationPromise = (async ()=>{
+    try{
 
-        try{
+        /*
+           Build all calendars.
+        */
 
-            /*
-               Do NOT load the scrapbook or signed media URLs here.
-               The scrapbook is loaded only when the user opens it.
-            */
-            const calendars =
-                Array.from(
-                    document.querySelectorAll(".calendar")
-                );
+        for(
+            const calendar of
+            document.querySelectorAll(
+                ".calendar"
+            )
+        ){
 
-            /* Fetch the entries once in the background, then build
-               calendars from the local cache instead of querying each day. */
-            await getAllRawEntries();
-
-            await Promise.all(
-                calendars.map(calendar => buildCalendar(calendar))
+            await buildCalendar(
+                calendar
             );
 
-            /* Keep the original feature set intact: preload the scrapbook
-               after the app is already visible. This never blocks login. */
-            await renderScrapbook();
-
-            appInitialized = true;
-            showApp();
-
-        }catch(error){
-
-            console.error(
-                "Application initialization failed:",
-                error
-            );
-
-            /* Keep the authenticated app usable even if background
-               scrapbook data temporarily fails. */
-            showApp();
-
-        }finally{
-            appInitializationPromise = null;
         }
 
-    })();
 
-    return appInitializationPromise;
+        /*
+           Load the shared scrapbook.
+        */
+
+        await renderScrapbook();
+
+
+        appInitialized =
+            true;
+
+
+        showApp();
+
+
+    }catch(error){
+
+        console.error(
+            "Application initialization failed:",
+            error
+        );
+
+
+        showLogin();
+
+
+        showAuthError(
+            "We couldn't open our scrapbook right now. Please try again."
+        );
+
+    }
 
 }
 
@@ -6433,10 +6390,7 @@ async function initializeApp(){
 
         if(data?.session){
 
-            showApp();
-            initializeApp().catch(error => {
-                console.error("Background initialization failed:", error);
-            });
+            await initializeApp();
 
         }else{
 
