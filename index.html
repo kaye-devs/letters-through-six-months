@@ -249,6 +249,74 @@ body.modal-open{
    NAVIGATION
 ========================= */
 
+
+/* Love's scrapbook welcome banner */
+.scrapbook-welcome-banner{
+    margin:18px auto 0;
+    width:min(92%, 900px);
+    padding:14px 22px;
+    border:1.5px solid var(--blue);
+    border-radius:18px;
+    background:linear-gradient(135deg, var(--blue-light), #fff);
+    color:var(--dark);
+    text-align:center;
+    font-family:"Cormorant Garamond",serif;
+    font-size:19px;
+    font-weight:700;
+    box-shadow:0 8px 24px rgba(91,126,167,.12);
+}
+
+.scrapbook-welcome-banner span{
+    color:var(--blue);
+}
+
+.nav-links a.scrapbook-highlight{
+    position:relative;
+    color:var(--blue);
+    font-weight:800;
+    padding:8px 13px;
+    margin:-8px -13px;
+    border:1.5px solid var(--blue);
+    border-radius:999px;
+    background:var(--blue-light);
+    box-shadow:0 0 0 4px rgba(91,126,167,.10);
+    animation:scrapbookPulse 2s ease-in-out infinite;
+}
+
+.nav-links a.scrapbook-highlight::after{
+    content:"♡";
+    position:absolute;
+    top:-12px;
+    right:-7px;
+    font-size:13px;
+    color:var(--blue);
+    background:#fff;
+    border-radius:50%;
+    line-height:18px;
+    width:18px;
+    height:18px;
+}
+
+@keyframes scrapbookPulse{
+    0%,100%{transform:scale(1);box-shadow:0 0 0 4px rgba(91,126,167,.10);}
+    50%{transform:scale(1.045);box-shadow:0 0 0 7px rgba(91,126,167,.05);}
+}
+
+@media(max-width:700px){
+    .scrapbook-welcome-banner{
+        margin:12px auto 0;
+        padding:12px 16px;
+        font-size:17px;
+        line-height:1.25;
+    }
+
+    .nav-links a.scrapbook-highlight{
+        display:block;
+        margin:2px 0;
+        padding:11px 12px;
+    }
+}
+
 nav{
     position:sticky;
     top:0;
@@ -862,6 +930,37 @@ footer span{
 
 .back-months:hover{
     background:var(--yellow);
+}
+
+.page-home-btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    border:none;
+    background:var(--dark);
+    color:var(--white);
+    padding:10px 18px;
+    border-radius:50px;
+    cursor:pointer;
+    font-weight:700;
+    box-shadow:0 6px 18px var(--shadow);
+    margin:0 5px 20px;
+    transition:.3s;
+}
+
+.page-home-btn:hover{
+    background:var(--blue);
+    transform:translateY(-2px);
+}
+
+@media(max-width:600px){
+    .page-home-btn,.back-months,.back-journal{
+        width:100%;
+        max-width:280px;
+        margin-left:auto;
+        margin-right:auto;
+    }
 }
 
 .month-page-header h2{
@@ -1860,7 +1959,7 @@ footer span{
     .nav-links a:hover{background:var(--blue-light);}
     .message-nav{background:var(--yellow);}
     .logout-button{width:100%;padding:11px;}
-    .scrapbook-grid{grid-template-columns:1fr;max-width:420px;}
+    .envelope-grid{grid-template-columns:1fr;max-width:420px;}
     .scrap-envelope{min-height:215px;}
     .message-media-grid{grid-template-columns:1fr;}
     .message-section{padding:55px 4%;}
@@ -1873,29 +1972,13 @@ footer span{
 }
 @media(max-width:800px){
 
-    nav{
-        flex-direction:column;
-        gap:10px;
-    }
-
-    .nav-right{
-        flex-direction:column;
-        gap:10px;
-    }
-
-    .nav-links{
-        gap:12px;
-        flex-wrap:wrap;
-        justify-content:center;
-    }
-
     section{
         padding:70px 5%;
     }
 
     .month-grid,
     .miss-grid,
-    .scrapbook-grid{
+    .envelope-grid{
         grid-template-columns:1fr;
     }
 
@@ -1945,6 +2028,32 @@ footer span{
         font-size:38px;
     }
 }
+
+
+@media(max-width:520px){.logo{font-size:23px}.nav-right{top:58px}.calendar-wrap{padding:10px}.calendar-day-name{font-size:8px;letter-spacing:.3px}.calendar-date{min-height:58px;padding:5px 3px}.date-number{font-size:18px}.entry-panel{padding:18px}.message-form{padding:18px 14px}.upload-card{min-height:105px;padding:14px}.envelope-grid{gap:35px 18px}.memory-envelope{height:220px}.envelope-date{font-size:23px;top:125px}.envelope-label{top:165px;font-size:9px}}
+
+
+.month-envelope .envelope-label{
+    font-size:11px;
+}
+.month-envelope .envelope-date{
+    top:126px;
+}
+.month-envelope .envelope-paper{
+    background:var(--blue-light);
+}
+.scrapbook-breadcrumb{
+    text-align:center;
+    margin:-35px auto 35px;
+    font-size:13px;
+    color:var(--blue);
+    font-weight:700;
+}
+
+.memory-envelope.empty-memory{opacity:.68}.memory-envelope.empty-memory .envelope-paper{background:#eef6ff}.memory-envelope.empty-memory .envelope-heart{opacity:.55}.memory-envelope.empty-memory:hover{opacity:1}
+
+
+.record-audio-button{margin-top:8px;border:0;background:var(--dark);color:#fff;padding:9px 13px;border-radius:30px;font:inherit;font-size:11px;font-weight:800;cursor:pointer;align-self:flex-start}.record-audio-button:hover{background:var(--blue)}
 
 </style>
 
@@ -2054,7 +2163,7 @@ footer span{
         <ul class="nav-links">
             <li><a href="#beginning" data-nav>Beginning</a></li>
             <li><a href="#months" data-nav>Journal</a></li>
-            <li><a href="#scrapbookPage" data-nav>Scrapbook</a></li>
+            <li><a href="#scrapbookPage" class="scrapbook-highlight" data-nav>Scrapbook ♡</a></li>
             <li><a href="#miss" data-nav>The Little Things</a></li>
             <li><a href="#countdown" data-nav>Countdown</a></li>
             <li><a href="#message" class="message-nav" data-nav>Message Me ♡</a></li>
@@ -2062,6 +2171,10 @@ footer span{
         <button class="logout-button" id="logoutButton">Log Out</button>
     </div>
 </nav>
+
+<div class="scrapbook-welcome-banner" id="scrapbookWelcomeBanner">
+    Hi Love! If you're here visiting our little corner, please click <span>Scrapbook ♡</span>
+</div>
 
 
 <!-- =========================
@@ -2559,6 +2672,10 @@ footer span{
                 ← Back to Our Months
             </button>
 
+            <button class="page-home-btn" type="button" data-home-page>
+                ⌂ Back to Home
+            </button>
+
             <h2>
                 September 2026 ♡
             </h2>
@@ -2674,6 +2791,10 @@ footer span{
 
             <button class="back-months">
                 ← Back to Our Months
+            </button>
+
+            <button class="page-home-btn" type="button" data-home-page>
+                ⌂ Back to Home
             </button>
 
             <h2>
@@ -2793,6 +2914,10 @@ footer span{
                 ← Back to Our Months
             </button>
 
+            <button class="page-home-btn" type="button" data-home-page>
+                ⌂ Back to Home
+            </button>
+
             <h2>
                 November 2026 ♡
             </h2>
@@ -2908,6 +3033,10 @@ footer span{
 
             <button class="back-months">
                 ← Back to Our Months
+            </button>
+
+            <button class="page-home-btn" type="button" data-home-page>
+                ⌂ Back to Home
             </button>
 
             <h2>
@@ -3027,6 +3156,10 @@ footer span{
                 ← Back to Our Months
             </button>
 
+            <button class="page-home-btn" type="button" data-home-page>
+                ⌂ Back to Home
+            </button>
+
             <h2>
                 January 2027 ♡
             </h2>
@@ -3144,6 +3277,10 @@ footer span{
                 ← Back to Our Months
             </button>
 
+            <button class="page-home-btn" type="button" data-home-page>
+                ⌂ Back to Home
+            </button>
+
             <h2>
                 February 2027 ♡
             </h2>
@@ -3259,6 +3396,10 @@ footer span{
 
             <button class="back-months">
                 ← Back to Our Months
+            </button>
+
+            <button class="page-home-btn" type="button" data-home-page>
+                ⌂ Back to Home
             </button>
 
             <h2>
@@ -3385,6 +3526,10 @@ footer span{
 
             </button>
 
+            <button class="page-home-btn" type="button" data-home-page>
+                ⌂ Back to Home
+            </button>
+
             <span>
                 Our Memories
             </span>
@@ -3417,104 +3562,28 @@ footer span{
 
 </section>
 
-<!-- ==================================================
-     DAILY MEMORY VIEWER
-================================================== -->
-
-<div
-    class="memory-overlay"
-    id="memoryOverlay">
-
-    <div class="memory-letter">
-
-        <button
-            class="memory-close"
-            id="memoryClose"
-            aria-label="Close memory">
-
-            ×
-
-        </button>
-
-        <div
-            class="memory-date"
-            id="memoryDate">
-        </div>
-
-        <h3 id="memoryTitle">
-            A Little Memory From This Day ♡
-        </h3>
-
-        <div
-            class="memory-text"
-            id="memoryText">
-        </div>
-
-        <div
-            class="memory-section-label"
-            id="photoLabel"
-            style="display:none;">
-
-            Photos ♡
-
-        </div>
-
-        <div
-            class="memory-media"
-            id="memoryPhotos">
-        </div>
-
-        <div
-            class="memory-section-label"
-            id="videoLabel"
-            style="display:none;">
-
-            Little Videos ♡
-
-        </div>
-
-        <div
-            class="memory-media"
-            id="memoryVideos">
-        </div>
-
-    </div>
-
-</div>
-
-<!-- ==================================================
-     FULLSCREEN PHOTO VIEWER
-================================================== -->
-
-<div
-    class="photo-lightbox"
-    id="photoLightbox"
-    aria-hidden="true">
-
-    <button
-        class="photo-lightbox-close"
-        id="photoLightboxClose"
-        aria-label="Close photo">
-
-        ×
-
-    </button>
-
-    <img
-        id="lightboxImage"
-        src=""
-        alt="Expanded memory photo">
-
-    <div
-        class="photo-lightbox-caption"
-        id="photoLightboxCaption">
-
-        Click anywhere outside to close ♡
-
-    </div>
-
-</div>
-
+<!-- =========================
+     MESSAGE ME PAGE
+========================= -->
+<section id="message" class="message-section">
+  <div class="message-page-inner">
+    <div class="message-note-card"><div class="message-note-icon">💌</div><h3>If you access this web, Love, please message me here ♡</h3><p>Leave me a little letter, photo, audio message, or video. It will be saved here with the date and time you sent it.</p></div>
+    <form class="message-form" id="messageForm">
+      <label for="messageText">Your message</label>
+      <textarea id="messageText" placeholder="Write anything you want to tell me... ♡"></textarea>
+      <div class="message-media-grid">
+        <label class="upload-card"><span>📷</span><strong>Upload Images</strong><small>Choose one or more photos</small><input id="messageImages" type="file" accept="image/*" multiple></label>
+        <div class="upload-card audio-upload-card"><span>🎙️</span><strong>Record Audio</strong><small id="audioRecordStatus">Tap the button to record a voice message</small><button type="button" class="record-audio-button" id="recordAudioButton">Start Recording</button><input id="messageAudio" type="file" accept="audio/*" hidden></div>
+        <label class="upload-card"><span>🎥</span><strong>Upload Video</strong><small>Choose a video from your device</small><input id="messageVideos" type="file" accept="video/*" multiple></label>
+      </div>
+      <div id="messagePreview" class="message-preview"></div>
+      <button class="send-message-button" id="sendMessageButton" type="submit">Send This To Me ♡</button>
+    </form>
+    <div class="message-history"><h3 class="message-history-title">Messages From You ♡</h3><div id="messagesList"></div></div>
+    <button class="page-home-btn" type="button" data-home-page>⌂ Back to Home</button>
+    <button class="back-message" id="backMessage" type="button">← Back to Our Little Corner</button>
+  </div>
+</section>
 
 <!-- =========================
      LITTLE THINGS
@@ -3891,6 +3960,10 @@ const messageHistory = document.getElementById("messagesList");
 const sendMessageButton = document.getElementById("sendMessageButton");
 const menuToggle = document.getElementById("menuToggle");
 const navRight = document.getElementById("navRight");
+const missSection = document.querySelector(".miss-section");
+const countdownSection = document.querySelector(".countdown-section");
+const finalSection = document.querySelector(".final-section");
+
 
 
 /* ============================================================
@@ -4022,7 +4095,12 @@ async function login(){
 
         loginForm.reset();
 
-        await initializeApp();
+        /* Show the app immediately after authentication.
+           Heavy calendar/media work happens in the background. */
+        showApp();
+        initializeApp().catch(error => {
+            console.error("Background initialization failed:", error);
+        });
 
     }
 
@@ -4095,11 +4173,14 @@ logoutButton.addEventListener(
 ============================================================ */
 
 supabaseClient.auth.onAuthStateChange(
-    async (event,session)=>{
+    (event,session)=>{
 
         if(session){
 
-            await initializeApp();
+            showApp();
+            initializeApp().catch(error => {
+                console.error("Background initialization failed:", error);
+            });
 
         }else{
 
@@ -4146,29 +4227,56 @@ async function readRawEntry(month,day){
 }
 
 
-async function getAllRawEntries(){
+let entriesCache = null;
+let entriesCachePromise = null;
 
-    const {
-        data,
-        error
-    } =
-        await supabaseClient
-            .from("entries")
-            .select("*");
+async function getAllRawEntries(forceRefresh=false){
 
-    if(error){
-
-        console.error(
-            "Could not load entries:",
-            error
-        );
-
-        throw error;
-
+    if(!forceRefresh && Array.isArray(entriesCache)){
+        return entriesCache;
     }
 
-    return data || [];
+    if(!forceRefresh && entriesCachePromise){
+        return entriesCachePromise;
+    }
 
+    entriesCachePromise = (async ()=>{
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+                .from("entries")
+                .select("*");
+
+        if(error){
+
+            console.error(
+                "Could not load entries:",
+                error
+            );
+
+            throw error;
+
+        }
+
+        entriesCache = data || [];
+        return entriesCache;
+
+    })();
+
+    try{
+        return await entriesCachePromise;
+    }finally{
+        entriesCachePromise = null;
+    }
+
+}
+
+function invalidateEntriesCache(){
+    entriesCache = null;
+    entriesCachePromise = null;
 }
 
 
@@ -4208,6 +4316,7 @@ async function saveRawEntry(entry){
 
     }
 
+    invalidateEntriesCache();
     return data;
 
 }
@@ -4690,95 +4799,46 @@ const backToJournal =
     );
 
 
-function openMonth(monthKey){
+function showMainHome(){
+    monthPages.forEach(page=>page.classList.remove("active"));
+    scrapbookPage.style.display="none";
+    scrapbookPage.classList.remove("active");
+    messageSection.classList.remove("active");
 
-    monthPages.forEach(
-        page => {
+    monthsSection.style.display="";
+    document.querySelector(".hero").style.display="";
+    document.querySelector(".letter-section").style.display="";
+    missSection.style.display="";
+    countdownSection.style.display="";
+    finalSection.style.display="";
 
-            page.classList.toggle(
-                "active",
-                page.dataset.pageMonth === monthKey
-            );
-
-        }
-    );
-
-
-    monthsSection.style.display =
-        "none";
-
-
-    document.getElementById("scrapbookPage").style.display =
-        "none";
-
-
-    document.querySelector(
-        ".miss-section"
-    ).style.display =
-        "none";
-
-
-    document.querySelector(
-        ".countdown-section"
-    ).style.display =
-        "none";
-
-
-    document.querySelector(
-        ".final-section"
-    ).style.display =
-        "none";
-
-
-    window.scrollTo({
-        top:0,
-        behavior:"smooth"
-    });
-
+    closeMobileMenu();
+    window.scrollTo({top:0,behavior:"smooth"});
 }
 
+function openMonth(monthKey){
+    monthPages.forEach(page=>{
+        page.classList.toggle("active",page.dataset.pageMonth===monthKey);
+    });
+
+    monthsSection.style.display="none";
+    scrapbookPage.style.display="none";
+    missSection.style.display="none";
+    countdownSection.style.display="none";
+    finalSection.style.display="none";
+    document.querySelector(".hero").style.display="none";
+    document.querySelector(".letter-section").style.display="none";
+    messageSection.classList.remove("active");
+
+    closeMobileMenu();
+    window.scrollTo({top:0,behavior:"smooth"});
+}
 
 function closeMonth(){
-
-    monthPages.forEach(
-        page =>
-            page.classList.remove(
-                "active"
-            )
-    );
-
-
-    monthsSection.style.display =
-        "";
-
-
-    document.getElementById("scrapbookPage").style.display =
-        "";
-
-
-    document.querySelector(
-        ".miss-section"
-    ).style.display =
-        "";
-
-
-    document.querySelector(
-        ".countdown-section"
-    ).style.display =
-        "";
-
-
-    document.querySelector(
-        ".final-section"
-    ).style.display =
-        "";
-
-
-    monthsSection.scrollIntoView({
-        behavior:"smooth"
-    });
-
+    showMainHome();
+    monthsSection.scrollIntoView({behavior:"smooth"});
 }
+
 
 
 monthCards.forEach(
@@ -4940,6 +5000,15 @@ async function buildCalendar(calendar){
     }
 
 
+    /*
+       Load entries once instead of making one Supabase request
+       for every calendar day. This makes login and navigation much faster.
+    */
+    const allEntries = await getAllRawEntries();
+    const entryById = new Map(
+        allEntries.map(entry => [entry.id, entry])
+    );
+
     for(
         let day = firstDate;
         day <= lastDay;
@@ -4975,10 +5044,9 @@ async function buildCalendar(calendar){
         try{
 
             const entry =
-                await readRawEntry(
-                    key,
-                    day
-                );
+                entryById.get(
+                    entryId(key, day)
+                ) || null;
 
 
             if(
@@ -5458,7 +5526,7 @@ document.querySelectorAll(
                     );
 
 
-                    await renderScrapbook();
+                    await renderScrapbook(true);
 
 
                     panel.classList.remove(
@@ -5515,692 +5583,423 @@ document.querySelectorAll(
    SCRAPBOOK PAGE NAVIGATION
 ================================================== */
 
-function openScrapbook(){
+let scrapbookView = "months";
+let scrapbookSelectedMonth = null;
+let scrapbookEntriesCache = [];
 
-    monthPages.forEach(
-        page =>
-            page.classList.remove(
-                "active"
-            )
+const SCRAPBOOK_MONTHS = [
+    "2026-09",
+    "2026-10",
+    "2026-11",
+    "2026-12",
+    "2027-01",
+    "2027-02",
+    "2027-03"
+];
+
+function getMonthLabel(key){
+    const [year, month] = key.split("-").map(Number);
+    return `${monthNames[month - 1]} ${year}`;
+}
+
+function formatDate(month, day){
+    const [year, monthNumber] = month.split("-").map(Number);
+    return `${monthNames[monthNumber - 1]} ${day}, ${year}`;
+}
+
+function getValidDaysForMonth(key){
+    const [year, month] = key.split("-").map(Number);
+    let first = 1;
+    let last = new Date(year, month, 0).getDate();
+
+    if(key === "2026-09") first = 16;
+    if(key === "2027-03") last = 16;
+
+    return { first, last };
+}
+
+function hasMemory(entry){
+    return !!(
+        entry &&
+        (
+            entry.letter ||
+            (Array.isArray(entry.images) && entry.images.length) ||
+            (Array.isArray(entry.videos) && entry.videos.length)
+        )
     );
+}
 
-
-    monthsSection.style.display =
-        "none";
-
-
-    missSection.style.display =
-        "none";
-
-
-    countdownSection.style.display =
-        "none";
-
-
-    finalSection.style.display =
-        "none";
-
-
-    scrapbookPage.style.display =
-        "block";
-
-
-    scrapbookPage.classList.add(
-        "active"
+function getEntriesForMonth(key){
+    return scrapbookEntriesCache.filter(
+        entry => entry.month === key && hasMemory(entry)
     );
+}
 
+function updateScrapbookBackButton(){
+    if(!backToJournal) return;
+
+    backToJournal.textContent =
+        scrapbookView === "months"
+            ? "← Back to Our Journal"
+            : "← Back to Months";
+}
+
+async function openScrapbook(){
+    scrapbookView = "months";
+    scrapbookSelectedMonth = null;
+
+    monthPages.forEach(page => page.classList.remove("active"));
+
+    document.querySelector(".hero").style.display = "none";
+    document.querySelector(".letter-section").style.display = "none";
+    monthsSection.style.display = "none";
+    missSection.style.display = "none";
+    countdownSection.style.display = "none";
+    finalSection.style.display = "none";
+    messageSection.classList.remove("active");
+
+    scrapbookPage.style.display = "block";
+    scrapbookPage.classList.add("active");
 
     closeMobileMenu();
+    window.scrollTo({top:0, behavior:"smooth"});
 
-    window.scrollTo({
-        top:0,
-        behavior:"smooth"
-    });
-
-
-    renderScrapbook();
-
+    await renderScrapbook(true);
 }
-
 
 function closeScrapbook(){
-
-    scrapbookPage.style.display =
-        "none";
-
-
-    scrapbookPage.classList.remove(
-        "active"
-    );
-
-
-    monthsSection.style.display =
-        "";
-
-
-    missSection.style.display =
-        "";
-
-
-    countdownSection.style.display =
-        "";
-
-
-    finalSection.style.display =
-        "";
-
-
-    monthsSection.scrollIntoView({
-        behavior:"smooth"
-    });
-
+    showMainHome();
+    monthsSection.scrollIntoView({behavior:"smooth"});
 }
 
+scrapbookNav?.addEventListener("click", event => {
+    event.preventDefault();
+    openScrapbook();
+});
 
-scrapbookNav.addEventListener(
-    "click",
-    event => {
-
-        event.preventDefault();
-
-        openScrapbook();
-
+backToJournal?.addEventListener("click", async () => {
+    if(scrapbookView === "days"){
+        scrapbookView = "months";
+        scrapbookSelectedMonth = null;
+        await renderScrapbook(false);
+        window.scrollTo({top:0, behavior:"smooth"});
+    }else{
+        closeScrapbook();
     }
-);
-
-
-backToJournal.addEventListener(
-    "click",
-    closeScrapbook
-);
+});
 
 
 /* ==================================================
-   SCRAPBOOK
-   ONE ENVELOPE = ONE DAY
+   SCRAPBOOK DATA + RENDERING
 ================================================== */
 
-function formatDate(
-    month,
-    day
-){
+async function renderScrapbook(forceRefresh = false){
+    const grid = document.getElementById("envelopeGrid");
+    if(!grid) return;
 
-    const [
-        year,
-        monthNumber
-    ] =
-        month
-        .split("-")
-        .map(Number);
-
-
-    return `
-        ${monthNames[monthNumber - 1]}
-        ${day},
-        ${year}
+    grid.innerHTML = `
+        <div class="empty-envelope">
+            <h3>Opening our scrapbook… ♡</h3>
+            <p>Gathering our little memories.</p>
+        </div>
     `;
 
-}
+    updateScrapbookBackButton();
 
+    try{
+        scrapbookEntriesCache =
+            await getAllRawEntries(forceRefresh);
+    }catch(error){
+        console.error("Scrapbook load error:", error);
 
-async function renderScrapbook(){
-
-    const grid =
-        document.getElementById(
-            "envelopeGrid"
-        );
-
+        grid.innerHTML = `
+            <div class="empty-envelope">
+                <h3>Our scrapbook is resting ♡</h3>
+                <p>We couldn't load the saved memories right now.</p>
+            </div>
+        `;
+        return;
+    }
 
     grid.innerHTML = "";
 
-
-    const entries =
-        await getAllEntries();
-
-
-    entries.sort(
-        (a,b) => {
-
-            const monthCompare =
-                a.month.localeCompare(
-                    b.month
-                );
-
-
-            if(
-                monthCompare !== 0
-            ){
-
-                return monthCompare;
-
-            }
-
-
-            return (
-                Number(a.day) -
-                Number(b.day)
-            );
-
-        }
-    );
-
-
-    let memoryCount = 0;
-
-
-    entries.forEach(
-        entry => {
-
-            const hasLetter =
-                !!entry.letter;
-
-
-            const photos =
-                entry.imageUrls || entry.images || [];
-
-
-            const videos =
-                entry.videoUrls || entry.videos || [];
-
-
-            if(
-                !hasLetter &&
-                photos.length === 0 &&
-                videos.length === 0
-            ){
-
-                return;
-
-            }
-
-
-            memoryCount++;
-
-
-            createMemoryEnvelope(
+    if(scrapbookView === "months"){
+        SCRAPBOOK_MONTHS.forEach(monthKey => {
+            createMonthEnvelope(
                 grid,
-                entry
+                monthKey,
+                getEntriesForMonth(monthKey)
             );
+        });
 
-        }
-    );
+        document.querySelector(".scrapbook-header p").textContent =
+            "Choose a month to open its little collection of memories. ♡";
 
-
-    if(memoryCount === 0){
-
-        const empty =
-            document.createElement(
-                "div"
-            );
-
-
-        empty.className =
-            "empty-envelope";
-
-
-        empty.innerHTML = `
-
-            <h3>
-                No memories yet ♡
-            </h3>
-
-            <p>
-                Open a date in the journal
-                and leave something behind for me.
-            </p>
-
-        `;
-
-
-        grid.appendChild(
-            empty
-        );
-
+        return;
     }
 
-}
+    const monthKey = scrapbookSelectedMonth;
+    const {first, last} = getValidDaysForMonth(monthKey);
+    const monthEntries = getEntriesForMonth(monthKey);
 
+    document.querySelector(".scrapbook-header p").textContent =
+        `${getMonthLabel(monthKey)} · Every date has its own little envelope. ♡`;
 
-/* ==================================================
-   CREATE ENVELOPE
-================================================== */
-
-function createMemoryEnvelope(
-    grid,
-    entry
-){
-
-    const envelope =
-        document.createElement(
-            "article"
-        );
-
-
-    envelope.className =
-        "memory-envelope";
-
-
-    envelope.tabIndex =
-        0;
-
-
-    envelope.setAttribute(
-        "role",
-        "button"
+    const byDay = new Map(
+        monthEntries.map(entry => [Number(entry.day), entry])
     );
 
+    try{
+        for(let day = first; day <= last; day++){
+            const entry = byDay.get(day) || {
+                id: entryId(monthKey, day),
+                month: monthKey,
+                day,
+                letter: "",
+                images: [],
+                videos: []
+            };
 
-    const body =
-        document.createElement(
-            "div"
-        );
+            createMemoryEnvelope(grid, entry);
+        }
+    }catch(error){
+        console.error("Scrapbook date-envelope render error:", error);
+        grid.innerHTML = `
+            <div class="empty-envelope">
+                <h3>We couldn't open this month ♡</h3>
+                <p>Please refresh the page and try the month envelope again.</p>
+            </div>
+        `;
+    }
+}
 
+function createMonthEnvelope(grid, monthKey, entries){
+    const envelope = document.createElement("article");
 
-    body.className =
-        "envelope-body";
+    envelope.className = "memory-envelope month-envelope";
+    envelope.tabIndex = 0;
+    envelope.setAttribute("role", "button");
+    envelope.setAttribute(
+        "aria-label",
+        `Open ${getMonthLabel(monthKey)} scrapbook`
+    );
 
+    envelope.innerHTML = `
+        <div class="envelope-body">
+            <div class="envelope-paper"></div>
+            <div class="envelope-heart">♡</div>
+            <div class="envelope-date">${getMonthLabel(monthKey)}</div>
+            <div class="envelope-label">
+                ${entries.length}
+                ${entries.length === 1 ? "Memory" : "Memories"}
+            </div>
+        </div>
+        <div class="envelope-flap"></div>
+        <div class="envelope-tape"></div>
+    `;
 
-    const paper =
-        document.createElement(
-            "div"
-        );
+    const open = async () => {
+        scrapbookSelectedMonth = monthKey;
+        scrapbookView = "days";
+        await renderScrapbook(false);
+        window.scrollTo({top:0, behavior:"smooth"});
+    };
 
+    envelope.addEventListener("click", open);
 
-    paper.className =
-        "envelope-paper";
+    envelope.addEventListener("keydown", event => {
+        if(event.key === "Enter" || event.key === " "){
+            event.preventDefault();
+            open();
+        }
+    });
 
+    grid.appendChild(envelope);
+}
 
-    const flap =
-        document.createElement(
-            "div"
-        );
+function createMemoryEnvelope(grid, entry){
+    const envelope = document.createElement("article");
+    const memoryExists = hasMemory(entry);
 
+    envelope.className =
+        "memory-envelope" +
+        (memoryExists ? "" : " empty-memory");
 
-    flap.className =
-        "envelope-flap";
+    envelope.tabIndex = 0;
+    envelope.setAttribute("role", "button");
 
+    const photoCount = Array.isArray(entry.images)
+        ? entry.images.length
+        : 0;
 
-    const tape =
-        document.createElement(
-            "div"
-        );
-
-
-    tape.className =
-        "envelope-tape";
-
-
-    const heart =
-        document.createElement(
-            "div"
-        );
-
-
-    heart.className =
-        "envelope-heart";
-
-
-    heart.textContent =
-        "♡";
-
-
-    const date =
-        document.createElement(
-            "div"
-        );
-
-
-    date.className =
-        "envelope-date";
-
-
-    date.textContent =
-        formatDate(
-            entry.month,
-            entry.day
-        );
-
-
-    const label =
-        document.createElement(
-            "div"
-        );
-
-
-    label.className =
-        "envelope-label";
-
-
-    const photoCount =
-        (entry.imageUrls || entry.images || []).length;
-
-
-    const videoCount =
-        (entry.videoUrls || entry.videos || []).length;
-
+    const videoCount = Array.isArray(entry.videos)
+        ? entry.videos.length
+        : 0;
 
     const parts = [];
 
-
-    if(entry.letter){
-
-        parts.push(
-            "Letter"
-        );
-
-    }
-
-
-    if(photoCount){
-
-        parts.push(
-            `${photoCount} Photo${
-                photoCount > 1
-                ? "s"
-                : ""
-            }`
-        );
-
-    }
-
-
-    if(videoCount){
-
-        parts.push(
-            `${videoCount} Video${
-                videoCount > 1
-                ? "s"
-                : ""
-            }`
-        );
-
-    }
-
-
-    label.textContent =
-        parts.join(" · ");
-
-
-    body.appendChild(
-        paper
+    if(entry.letter) parts.push("Letter");
+    if(photoCount) parts.push(
+        `${photoCount} Photo${photoCount > 1 ? "s" : ""}`
+    );
+    if(videoCount) parts.push(
+        `${videoCount} Video${videoCount > 1 ? "s" : ""}`
     );
 
+    envelope.innerHTML = `
+        <div class="envelope-body">
+            <div class="envelope-paper"></div>
+            <div class="envelope-heart">${memoryExists ? "♡" : "·"}</div>
+            <div class="envelope-date">${formatDate(entry.month, entry.day)}</div>
+            <div class="envelope-label">
+                ${memoryExists ? parts.join(" · ") : "Open this date"}
+            </div>
+        </div>
+        <div class="envelope-flap"></div>
+        <div class="envelope-tape"></div>
+    `;
 
-    body.appendChild(
-        heart
-    );
-
-
-    body.appendChild(
-        date
-    );
-
-
-    body.appendChild(
-        label
-    );
-
-
-    envelope.appendChild(
-        body
-    );
-
-
-    envelope.appendChild(
-        flap
-    );
-
-
-    envelope.appendChild(
-        tape
-    );
-
-
-    envelope.addEventListener(
-        "click",
-        () =>
-            openMemoryEnvelope(entry)
-    );
-
-
-    envelope.addEventListener(
-        "keydown",
-        event => {
-
-            if(
-                event.key === "Enter" ||
-                event.key === " "
-            ){
-
-                event.preventDefault();
-
-                openMemoryEnvelope(entry);
-
-            }
-
+    const open = async () => {
+        if(memoryExists){
+            await openMemoryEnvelope(entry);
+            return;
         }
-    );
 
+        openMonth(entry.month);
 
-    grid.appendChild(
-        envelope
-    );
+        setTimeout(() => {
+            const calendar =
+                document.querySelector(
+                    `.calendar[data-calendar="${entry.month}"]`
+                );
 
+            if(!calendar) return;
+
+            const dateButton =
+                [...calendar.querySelectorAll(".calendar-date")]
+                .find(button =>
+                    button.querySelector(".date-number")?.textContent ===
+                    String(entry.day)
+                );
+
+            if(dateButton) dateButton.click();
+        }, 400);
+    };
+
+    envelope.addEventListener("click", open);
+
+    envelope.addEventListener("keydown", event => {
+        if(event.key === "Enter" || event.key === " "){
+            event.preventDefault();
+            open();
+        }
+    });
+
+    grid.appendChild(envelope);
 }
 
+async function openMemoryEnvelope(entry){
+    const overlay = document.getElementById("memoryOverlay");
+    if(!overlay) return;
 
+    const fullEntry = await addSignedUrls(entry);
+
+    document.getElementById("memoryDate").textContent =
+        formatDate(entry.month, entry.day);
+
+    document.getElementById("memoryTitle").textContent =
+        "A Little Memory From This Day ♡";
+
+    document.getElementById("memoryLetter").textContent =
+        fullEntry.letter || "";
+
+    const media = document.getElementById("memoryMedia");
+    media.innerHTML = "";
+
+    (fullEntry.imageUrls || []).forEach(url => {
+        const image = document.createElement("img");
+        image.src = url;
+        image.alt = "Saved memory photo";
+        image.addEventListener(
+            "click",
+            () => openPhotoLightbox(url)
+        );
+        media.appendChild(image);
+    });
+
+    (fullEntry.videoUrls || []).forEach(url => {
+        const video = document.createElement("video");
+        video.src = url;
+        video.controls = true;
+        video.preload = "metadata";
+        media.appendChild(video);
+    });
+
+    overlay.classList.add("show");
+    document.body.classList.add("modal-open");
+}
+
+function closeMemoryEnvelope(){
+    document.getElementById("memoryOverlay")?.classList.remove("show");
+    document.body.classList.remove("modal-open");
+}
+
+document.getElementById("closeMemory")?.addEventListener(
+    "click",
+    closeMemoryEnvelope
+);
+
+document.getElementById("memoryOverlay")?.addEventListener(
+    "click",
+    event => {
+        if(event.target.id === "memoryOverlay"){
+            closeMemoryEnvelope();
+        }
+    }
+);
 
 /* ============================================================
    MESSAGE PAGE
 ============================================================ */
-
-function openMessagePage(){
-    document.querySelectorAll(".month-page").forEach(page=>page.classList.remove("active"));
-    document.getElementById("months").style.display="none";
-    document.getElementById("scrapbookPage").style.display="none";
-    document.querySelector(".miss-section").style.display="none";
-    document.querySelector(".countdown-section").style.display="none";
-    document.querySelector(".final-section").style.display="none";
-    document.querySelector(".hero").style.display="none";
-    document.querySelector(".letter-section").style.display="none";
-    messageSection.classList.add("active");
-    closeMobileMenu();
-    window.scrollTo({top:0,behavior:"smooth"});
-    loadMessages();
-}
-
-function closeMessagePage(){
-    messageSection.classList.remove("active");
-    document.querySelector(".hero").style.display="";
-    document.querySelector(".letter-section").style.display="";
-    document.getElementById("months").style.display="";
-    document.getElementById("scrapbookPage").style.display="";
-    document.querySelector(".miss-section").style.display="";
-    document.querySelector(".countdown-section").style.display="";
-    document.querySelector(".final-section").style.display="";
-    document.getElementById("beginning").scrollIntoView({behavior:"smooth"});
-}
-
-document.querySelectorAll('a[href="#message"]').forEach(link=>{
-    link.addEventListener("click",event=>{
-        event.preventDefault();
-        openMessagePage();
-    });
-});
-document.getElementById("openMessage").addEventListener("click",openMessagePage);
-document.getElementById("backMessage").addEventListener("click",closeMessagePage);
-
-function previewMessageFiles(){
-    messagePreview.innerHTML="";
-    const files=[
-        ...Array.from(messageImages.files||[]).map(file=>({file,kind:"image"})),
-        ...Array.from(messageAudio.files||[]).map(file=>({file,kind:"audio"})),
-        ...Array.from(messageVideos.files||[]).map(file=>({file,kind:"video"}))
-    ];
-
-    files.forEach(({file,kind})=>{
-        const url=URL.createObjectURL(file);
-        let el;
-        if(kind==="image"){
-            el=document.createElement("img");
-            el.alt=file.name;
-        }else if(kind==="audio"){
-            el=document.createElement("audio");
-            el.controls=true;
-        }else{
-            el=document.createElement("video");
-            el.controls=true;
-        }
-        el.src=url;
-        messagePreview.appendChild(el);
-    });
-}
-
-[messageImages,messageAudio,messageVideos].forEach(input=>{
-    input.addEventListener("change",previewMessageFiles);
-});
-
-function messagePath(file,kind){
-    return `messages/${crypto.randomUUID()}/${kind}/${createSafeFileName(file)}`;
-}
-
-async function uploadMessageFiles(files,kind){
-    const paths=[];
-    for(const file of files){
-        const path=messagePath(file,kind);
-        const {error}=await supabaseClient.storage.from(STORAGE_BUCKET).upload(path,file,{cacheControl:"3600",upsert:false});
-        if(error) throw error;
-        paths.push(path);
-    }
-    return paths;
-}
-
-async function saveMessageRecord(record){
-    const {data,error}=await supabaseClient.from("messages").insert(record).select().single();
-    if(error) throw error;
-    return data;
-}
-
-async function addMessageSignedUrls(message){
-    const fields=[
-        ["images","imageUrls"],
-        ["audios","audioUrls"],
-        ["videos","videoUrls"]
-    ];
-    const output={...message};
-    for(const [source,target] of fields){
-        const paths=Array.isArray(message[source]) ? message[source] : [];
-        output[target]=(await Promise.all(paths.map(path=>getSignedUrl(path)))).filter(Boolean);
-    }
-    return output;
-}
-
-async function loadMessages(){
-    if(!messageHistory) return;
-    messageHistory.innerHTML='<div class="empty-scrapbook">Loading our little messages… ♡</div>';
-
+function openMessagePage(){document.querySelectorAll(".month-page").forEach(p=>p.classList.remove("active"));document.getElementById("months").style.display="none";document.getElementById("scrapbookPage").style.display="none";document.querySelector(".miss-section").style.display="none";document.querySelector(".countdown-section").style.display="none";document.querySelector(".final-section").style.display="none";document.querySelector(".hero").style.display="none";document.querySelector(".letter-section").style.display="none";messageSection.classList.add("active");closeMobileMenu();window.scrollTo({top:0,behavior:"smooth"});loadMessages();}
+function closeMessagePage(){showMainHome();document.getElementById("beginning").scrollIntoView({behavior:"smooth"});}
+document.querySelectorAll('a[href="#message"]').forEach(l=>l.addEventListener("click",e=>{e.preventDefault();openMessagePage();}));document.getElementById("openMessage")?.addEventListener("click",openMessagePage);document.getElementById("backMessage")?.addEventListener("click",closeMessagePage);
+function previewMessageFiles(){messagePreview.innerHTML="";const fs=[...Array.from(messageImages.files||[]).map(f=>[f,"image"]),...(recordedAudioFile?[ [recordedAudioFile,"audio"] ]:[]),...Array.from(messageVideos.files||[]).map(f=>[f,"video"])];fs.forEach(([f,k])=>{const u=URL.createObjectURL(f);const el=document.createElement(k==="image"?"img":k==="audio"?"audio":"video");el.src=u;if(k!=="image")el.controls=true;messagePreview.appendChild(el);});}
+let recordedAudioFile = null;
+let audioRecorder = null;
+let audioChunks = [];
+const recordAudioButton = document.getElementById("recordAudioButton");
+const audioRecordStatus = document.getElementById("audioRecordStatus");
+recordAudioButton?.addEventListener("click", async ()=>{
+    if(audioRecorder && audioRecorder.state === "recording"){ audioRecorder.stop(); return; }
     try{
-        const {data,error}=await supabaseClient
-            .from("messages")
-            .select("*")
-            .order("created_at",{ascending:false});
-
-        if(error) throw error;
-
-        if(!data?.length){
-            messageHistory.innerHTML=`<div class="empty-scrapbook"><h3>No message yet ♡</h3><p>I'm waiting for your first little message.</p></div>`;
-            return;
-        }
-
-        messageHistory.innerHTML="";
-        for(const raw of data){
-            const message=await addMessageSignedUrls(raw);
-            const item=document.createElement("article");
-            item.className="message-item";
-
-            const date=document.createElement("small");
-            date.textContent=new Date(message.created_at||Date.now()).toLocaleString();
-            item.appendChild(date);
-
-            const text=document.createElement("p");
-            text.textContent=message.message || message.content || "";
-            item.appendChild(text);
-
-            const media=document.createElement("div");
-            media.className="message-item-media";
-
-            (message.imageUrls||[]).forEach(url=>{
-                const img=document.createElement("img");
-                img.src=url;
-                img.alt="Message photo";
-                media.appendChild(img);
-            });
-            (message.audioUrls||[]).forEach(url=>{
-                const audio=document.createElement("audio");
-                audio.src=url;
-                audio.controls=true;
-                media.appendChild(audio);
-            });
-            (message.videoUrls||[]).forEach(url=>{
-                const video=document.createElement("video");
-                video.src=url;
-                video.controls=true;
-                media.appendChild(video);
-            });
-
-            item.appendChild(media);
-            messageHistory.appendChild(item);
-        }
-    }catch(error){
-        console.error("Could not load messages:",error);
-        messageHistory.innerHTML='<div class="empty-scrapbook"><h3>Messages are resting ♡</h3><p>The message page needs a Supabase <code>messages</code> table with message/images/audios/videos columns.</p></div>';
-    }
-}
-
-messageForm.addEventListener("submit",async event=>{
-    event.preventDefault();
-
-    const text=messageText.value.trim();
-    const images=Array.from(messageImages.files||[]);
-    const audios=Array.from(messageAudio.files||[]);
-    const videos=Array.from(messageVideos.files||[]);
-
-    if(!text && !images.length && !audios.length && !videos.length){
-        showToast("Please write a message or add something first.",true);
-        return;
-    }
-
-    sendMessageButton.disabled=true;
-    sendMessageButton.textContent="Sending this little message… ♡";
-
-    try{
-        const uploadedImages=await uploadMessageFiles(images,"images");
-        const uploadedAudios=await uploadMessageFiles(audios,"audios");
-        const uploadedVideos=await uploadMessageFiles(videos,"videos");
-
-        const user=(await supabaseClient.auth.getUser()).data.user;
-
-        await saveMessageRecord({
-            message:text,
-            images:uploadedImages,
-            audios:uploadedAudios,
-            videos:uploadedVideos,
-            sender_id:user?.id || null,
-            sender_email:user?.email || null
-        });
-
-        messageForm.reset();
-        messagePreview.innerHTML="";
-        await loadMessages();
-        showToast("Your message reached me. ♡");
-    }catch(error){
-        console.error("Message save error:",error);
-        showToast("I couldn't send the message right now. Please try again.",true);
-    }finally{
-        sendMessageButton.disabled=false;
-        sendMessageButton.textContent="Send This To Me ♡";
+        const stream=await navigator.mediaDevices.getUserMedia({audio:true});
+        audioChunks=[];
+        audioRecorder=new MediaRecorder(stream);
+        audioRecorder.ondataavailable=e=>{if(e.data.size)audioChunks.push(e.data);};
+        audioRecorder.onstop=()=>{
+            stream.getTracks().forEach(t=>t.stop());
+            const blob=new Blob(audioChunks,{type:audioRecorder.mimeType||"audio/webm"});
+            recordedAudioFile=new File([blob],`voice-message-${Date.now()}.webm`,{type:blob.type});
+            audioRecordStatus.textContent="Voice message recorded. Tap again to replace it.";
+            recordAudioButton.textContent="Record Again";
+            previewMessageFiles();
+        };
+        audioRecorder.start();
+        recordAudioButton.textContent="Stop Recording";
+        audioRecordStatus.textContent="Recording… tap Stop Recording when you are finished.";
+    }catch(err){
+        console.error(err);
+        audioRecordStatus.textContent="Microphone access was not allowed. You can choose an audio file instead.";
+        messageAudio.click();
     }
 });
+messageAudio?.addEventListener("change",()=>{if(messageAudio.files?.[0]){recordedAudioFile=messageAudio.files[0];audioRecordStatus.textContent="Audio file selected.";previewMessageFiles();}});
+async function uploadMessageFiles(files,kind){const paths=[];for(const f of files){const path=`messages/${crypto.randomUUID()}/${kind}/${createSafeFileName(f)}`;const {error}=await supabaseClient.storage.from(STORAGE_BUCKET).upload(path,f,{cacheControl:"3600",upsert:false});if(error)throw error;paths.push(path);}return paths;}
+async function saveMessageRecord(r){const {data,error}=await supabaseClient.from("messages").insert(r).select().single();if(error)throw error;return data;}
+async function addMessageSignedUrls(msg){const o={...msg};for(const [src,dst] of [["images","imageUrls"],["audios","audioUrls"],["videos","videoUrls"]]){const paths=Array.isArray(msg[src])?msg[src]:[];o[dst]=(await Promise.all(paths.map(getSignedUrl))).filter(Boolean);}return o;}
+async function loadMessages(){if(!messageHistory)return;messageHistory.innerHTML='<div class="empty-envelope"><p>Loading our little messages… ♡</p></div>';try{const {data,error}=await supabaseClient.from("messages").select("*").order("created_at",{ascending:false});if(error)throw error;if(!data?.length){messageHistory.innerHTML=`<div class="empty-envelope"><h3>No message yet ♡</h3><p>I'm waiting for your first little message.</p></div>`;return;}messageHistory.innerHTML="";for(const raw of data){const msg=await addMessageSignedUrls(raw);const item=document.createElement("article");item.className="message-item";const d=document.createElement("small");d.textContent=new Date(msg.created_at||Date.now()).toLocaleString();item.appendChild(d);const t=document.createElement("p");t.textContent=msg.message||msg.content||"";item.appendChild(t);const media=document.createElement("div");media.className="message-item-media";(msg.imageUrls||[]).forEach(u=>{const i=document.createElement("img");i.src=u;i.alt="Message photo";media.appendChild(i);});(msg.audioUrls||[]).forEach(u=>{const a=document.createElement("audio");a.src=u;a.controls=true;media.appendChild(a);});(msg.videoUrls||[]).forEach(u=>{const v=document.createElement("video");v.src=u;v.controls=true;media.appendChild(v);});item.appendChild(media);messageHistory.appendChild(item);}}catch(e){console.error(e);messageHistory.innerHTML='<div class="empty-envelope"><h3>Messages are resting ♡</h3><p>Please make sure the Supabase <code>messages</code> table and storage policies are set up.</p></div>';}}
+messageForm?.addEventListener("submit",async e=>{e.preventDefault();const text=messageText.value.trim(),images=Array.from(messageImages.files||[]),audios=recordedAudioFile?[recordedAudioFile]:Array.from(messageAudio.files||[]),videos=Array.from(messageVideos.files||[]);if(!text&&!images.length&&!audios.length&&!videos.length){showToast("Please write a message or add something first.",true);return;}sendMessageButton.disabled=true;sendMessageButton.textContent="Sending this little message… ♡";try{const [ii,aa,vv]=await Promise.all([uploadMessageFiles(images,"images"),uploadMessageFiles(audios,"audios"),uploadMessageFiles(videos,"videos")]);const u=(await supabaseClient.auth.getUser()).data.user;await saveMessageRecord({message:text,images:ii,audios:aa,videos:vv,sender_id:u?.id||null,sender_email:u?.email||null});messageForm.reset();recordedAudioFile=null;audioRecordStatus.textContent="Tap the button to record a voice message";if(recordAudioButton)recordAudioButton.textContent="Start Recording";messagePreview.innerHTML="";await loadMessages();showToast("Your message reached me. ♡");}catch(err){console.error(err);showToast("I couldn't send the message right now. Please try again.",true);}finally{sendMessageButton.disabled=false;sendMessageButton.textContent="Send This To Me ♡";}});
 
 /* ============================================================
    MOBILE MENU
@@ -6218,6 +6017,12 @@ menuToggle.addEventListener("click",()=>{
 
 document.querySelectorAll("[data-nav]").forEach(link=>{
     link.addEventListener("click",closeMobileMenu);
+});
+
+
+/* HOME BUTTONS ON EVERY SECONDARY PAGE */
+document.querySelectorAll("[data-home-page]").forEach(button=>{
+    button.addEventListener("click",showMainHome);
 });
 
 /* ============================================================
@@ -6308,68 +6113,67 @@ photoLightbox.addEventListener(
 let appInitialized =
     false;
 
+let appInitializationPromise =
+    null;
+
 
 async function initializeApp(){
 
     if(appInitialized){
-
         showApp();
-
         return;
-
     }
 
+    if(appInitializationPromise){
+        return appInitializationPromise;
+    }
 
-    try{
+    appInitializationPromise = (async ()=>{
 
-        /*
-           Build all calendars.
-        */
+        try{
 
-        for(
-            const calendar of
-            document.querySelectorAll(
-                ".calendar"
-            )
-        ){
+            /*
+               Do NOT load the scrapbook or signed media URLs here.
+               The scrapbook is loaded only when the user opens it.
+            */
+            const calendars =
+                Array.from(
+                    document.querySelectorAll(".calendar")
+                );
 
-            await buildCalendar(
-                calendar
+            /* Fetch the entries once in the background, then build
+               calendars from the local cache instead of querying each day. */
+            await getAllRawEntries();
+
+            await Promise.all(
+                calendars.map(calendar => buildCalendar(calendar))
             );
 
+            /* Keep the original feature set intact: preload the scrapbook
+               after the app is already visible. This never blocks login. */
+            await renderScrapbook(true);
+
+            appInitialized = true;
+            showApp();
+
+        }catch(error){
+
+            console.error(
+                "Application initialization failed:",
+                error
+            );
+
+            /* Keep the authenticated app usable even if background
+               scrapbook data temporarily fails. */
+            showApp();
+
+        }finally{
+            appInitializationPromise = null;
         }
 
+    })();
 
-        /*
-           Load the shared scrapbook.
-        */
-
-        await renderScrapbook();
-
-
-        appInitialized =
-            true;
-
-
-        showApp();
-
-
-    }catch(error){
-
-        console.error(
-            "Application initialization failed:",
-            error
-        );
-
-
-        showLogin();
-
-
-        showAuthError(
-            "We couldn't open our scrapbook right now. Please try again."
-        );
-
-    }
+    return appInitializationPromise;
 
 }
 
@@ -6390,7 +6194,10 @@ async function initializeApp(){
 
         if(data?.session){
 
-            await initializeApp();
+            showApp();
+            initializeApp().catch(error => {
+                console.error("Background initialization failed:", error);
+            });
 
         }else{
 
